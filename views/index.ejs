@@ -1,3 +1,5 @@
+<%- include('partials/header.ejs'); -%>
+
 <% if (locals.data) {  %>
   <h1><%= data.book_title %></h1>
   <h1><%= data.rating %>/10</h1>
@@ -10,3 +12,5 @@
 <% } else { %>
   <p>error</p>
 <% } %>
+
+<%- include('partials/footer.ejs'); -%>

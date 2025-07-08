@@ -1,0 +1,74 @@
+@font-face {
+  font-family: 'Julee';
+  src: url('fonts/julee.woff2') format('woff2'),
+       url('fonts/julee.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Karla';
+  src: url('fonts/karla.woff2') format('woff2'),
+       url('fonts/karla.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+:root {
+  --font-family-julee: 'Julee', sans-serif;
+  --font-family-karla: 'Karla', sans-serif;
+  --font-family-inter: 'Inter', sans-serif;
+  --text-dark-green: rgba(171, 159, 102, 1);
+  --text-black: rgba(0, 0, 0, 1);
+  --text-grey: rgba(71, 71, 71, 1);
+  --main-green: rgba(190, 201, 167, 1);
+  --main-brown: rgba(218, 190, 142, 1);
+  --main-white: rgba(243, 238, 234, 1);
+}
+
+.title-text {
+  flex-grow: 0;
+  flex-shrink: 1;
+  flex-basis: auto;
+  font-family: var(--font-family-julee);
+  font-weight: bold;
+  font-size: 48px;
+  color: var(--text-dark-green);
+}
+
+.text-rgb-171-159-102 {
+  color: var(--text-dark-green);
+}
+
+.text-black {
+  color: var(--text-black);
+}
+
+.text-rgb-71-71-71 {
+  color: var(--text-grey);
+}
+
+
+/* CSS Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-color: var(--main-white);
+}
+
+.navbar {
+  background-color: var(--main-green);
+  width: 100vw;
+  height: 4.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+}
