@@ -10,41 +10,6 @@
   --main-white: rgba(243, 238, 234, 1);
 }
 
-.title-text {
-  flex-grow: 0;
-  flex-shrink: 1;
-  flex-basis: auto;
-  font-family: var(--font-family-julee);
-  font-weight: bold;
-  font-size: 48px;
-  color: var(--text-dark-green);
-  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-  position: relative;
-  text-align: center;
-  padding: 3px 0;
-}
-
-.title-text::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -5%;
-  width: 110%;
-  height: 1px;
-  background-color: black;
-}
-
-.title-text::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 6%;
-  width: 90%;
-  height: 1px;
-  background-color: black;
-}
-
-
 .julee-regular {
   font-family: var(--font-family-julee);
   font-weight: 400;
@@ -70,7 +35,6 @@
   color: var(--text-grey);
 }
 
-
 /* CSS Reset */
 * {
   margin: 0;
@@ -85,10 +49,52 @@ body {
   background-color: var(--main-white);
 }
 
-.navbar {
+.custom-navbar {
   background-color: var(--main-green);
   width: 100vw;
   height: 4.5rem;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.title-text {
+  flex-grow: 0;
+  flex-shrink: 1;
+  flex-basis: auto;
+  font-family: var(--font-family-julee);
+  font-weight: bold;
+  font-size: 48px;
+  color: var(--text-dark-green);
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  position: relative;
+  text-align: center;
+}
+
+.title-text::before {
+  content: "";
+  position: absolute;
+  top: 5px;
+  left: -5%;
+  width: 110%;
+  height: 1px;
+  background-color: black;
+}
+
+.title-text::after {
+  content: "";
+  position: absolute;
+  bottom: 5px;
+  left: 6%;
+  width: 90%;
+  height: 1px;
+  background-color: black;
+}
+
+footer {
+  background-color: var(--main-green);
+  width: 100vw;
+  height: 3rem;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -1,16 +1,18 @@
 <%- include('partials/header.ejs'); -%>
 
-<% if (locals.data) {  %>
-  <h1><%= data.book_title %></h1>
-  <h1><%= data.rating %>/10</h1>
-  <h1><%= data.date_started %>-<%= data.date_finished %></h1>
-  <h1><%= data.summary %></h1>
-  <h1><%= data.note %></h1>
-  <h1><%= data.book_cover %></h1>
-  <h1><%= data.book_author %></h1>
-  <h1><%= data.book_isbn %></h1>
-<% } else { %>
-  <p>error</p>
-<% } %>
+<div class="container">
+  <% if (locals.data) {  %>
+    <h1><%= data.book_title %></h1>
+    <h1><%= data.rating %>/10</h1>
+    <h1><%= data.date_started %>-<%= data.date_finished %></h1>
+    <h1><%= data.summary %></h1>
+    <h1><%= data.note %></h1>
+    <h1><%= data.book_cover %></h1>
+    <h1><%= data.book_author %></h1>
+    <h1><%= data.book_isbn %></h1>
+  <% } else { %>
+    <p>error</p>
+  <% } %>
+</div>
 
 <%- include('partials/footer.ejs'); -%>
