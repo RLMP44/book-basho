@@ -25,7 +25,7 @@ app.use(express.static("public"));
 
 const currentUserId = 1;
 
-async function getBooks() {
+async function getUserBooks() {
   const query = `
     SELECT
       rb.rating,
@@ -44,19 +44,33 @@ async function getBooks() {
     WHERE user_id = $1;
   `
   const results = await db.query(query, [currentUserId]);
-  return results.rows[0];
+  return results.rows;
 }
 
 app.get("/", async (req, res) => {
   try {
-    const data = await getBooks();
+    const data = await getUserBooks();
     res.render("index.ejs", { data: data });
   } catch (error) {
     console.log(error);
   }
 });
 
-// TODO: add notes/:id show page
+app.get("/notes/:id", async (req, res) => {
+  // TODO: add notes show page
+});
+
+app.post("/add", async (req, res) => {
+  // TODO: add notes
+});
+
+app.post("/notes/:id/edit", async (req, res) => {
+  // TODO: add notes edit page
+});
+
+app.post("/notes/:id/delete", (req, res) => {
+  // TODO: delete capabilities
+});
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);

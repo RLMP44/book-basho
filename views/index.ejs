@@ -2,14 +2,25 @@
 
 <div class="container">
   <% if (locals.data) {  %>
-    <h1><%= data.book_title %></h1>
-    <h1><%= data.rating %>/10</h1>
-    <h1><%= data.date_started %>-<%= data.date_finished %></h1>
-    <h1><%= data.summary %></h1>
-    <h1><%= data.note %></h1>
-    <h1><%= data.book_cover %></h1>
-    <h1><%= data.book_author %></h1>
-    <h1><%= data.book_isbn %></h1>
+    <% data.forEach((book) => { %>
+      <div class="container book-card">
+        <div class="card-top">
+          <p class="text-grey" style="justify-self: flex-start">Rating: <%= book.rating %>/10</p>
+          <p class="text-grey">Read: <%= book.date_started.getMonth() %>/<%= book.date_started.getFullYear() %>-<%= book.date_finished.getMonth() %>/<%= book.date_finished.getFullYear() %></p>
+          <div class="card-buttons-container">
+            <btn>🖊️</btn>
+            <btn>🗑️</btn>
+          </div>
+        </div>
+        <p class="text-black mb-0"><strong><%= book.book_title %></strong></p>
+        <p class="text-black mb-0"><em><%= book.book_author %></em></p>
+        <p class="text-black"><%= book.summary %></p>
+        <p class="text-black"><%= book.note %></p>
+        <img src="https://d827xgdhgqbnd.cloudfront.net/wp-content/uploads/2016/04/09121712/book-cover-placeholder.png" alt="book cover" width="100" height="150">
+        <%#= book.book_cover %>
+        <p class="text-grey"><%= book.book_isbn %></p>
+      </div>
+    <% }); %>
   <% } else { %>
     <p>error</p>
   <% } %>

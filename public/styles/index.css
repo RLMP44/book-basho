@@ -100,3 +100,23 @@ footer {
   align-items: center;
   margin-bottom: 1rem;
 }
+
+.book-card {
+  background-color: var(--main-brown);
+}
+
+.card-buttons-container {
+  display: flex;
+}
+
+.card-top {
+  display: grid;
+  grid-template-columns: 5fr 5fr 2fr;
+  justify-items: end;
+}
+
+.book-card {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
