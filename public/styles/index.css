@@ -1,21 +1,5 @@
-@font-face {
-  font-family: 'Julee';
-  src: url('fonts/julee.woff2') format('woff2'),
-       url('fonts/julee.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Karla';
-  src: url('fonts/karla.woff2') format('woff2'),
-       url('fonts/karla.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-}
-
 :root {
-  --font-family-julee: 'Julee', sans-serif;
+  --font-family-julee: 'Julee', cursive;
   --font-family-karla: 'Karla', sans-serif;
   --font-family-inter: 'Inter', sans-serif;
   --text-dark-green: rgba(171, 159, 102, 1);
@@ -34,9 +18,47 @@
   font-weight: bold;
   font-size: 48px;
   color: var(--text-dark-green);
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  position: relative;
+  text-align: center;
+  padding: 3px 0;
 }
 
-.text-rgb-171-159-102 {
+.title-text::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -5%;
+  width: 110%;
+  height: 1px;
+  background-color: black;
+}
+
+.title-text::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 6%;
+  width: 90%;
+  height: 1px;
+  background-color: black;
+}
+
+
+.julee-regular {
+  font-family: var(--font-family-julee);
+  font-weight: 400;
+  font-style: normal;
+}
+
+.karla-regular {
+  font-family: var(--font-family-karla);
+  font-optical-sizing: auto;
+  font-weight: 200;
+  font-style: normal;
+}
+
+.text-dark-green {
   color: var(--text-dark-green);
 }
 
@@ -44,7 +66,7 @@
   color: var(--text-black);
 }
 
-.text-rgb-71-71-71 {
+.text-grey {
   color: var(--text-grey);
 }
 
