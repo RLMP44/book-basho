@@ -4,21 +4,21 @@
   <% if (locals.data) {  %>
     <% data.forEach((book) => { %>
       <div class="book-card">
-        <div class="card-top">
-          <p class="text-grey" style="justify-self: flex-start">Rating: <%= book.rating %>/10</p>
-          <p class="text-grey">Read: <%= book.date_started.getMonth() %>/<%= book.date_started.getFullYear() %>-<%= book.date_finished.getMonth() %>/<%= book.date_finished.getFullYear() %></p>
-          <div class="card-buttons-container">
+        <div class="card-body">
+          <p class="text-grey card-rating" style="justify-self: flex-start">Rating: <%= book.rating %>/10</p>
+          <p class="text-grey card-read">Read: <%= book.date_started.getMonth() %>/<%= book.date_started.getFullYear() %>-<%= book.date_finished.getMonth() %>/<%= book.date_finished.getFullYear() %></p>
+          <div class="card-buttons card-buttons-container">
             <btn>🖊️</btn>
             <btn>🗑️</btn>
           </div>
+          <div class="card-title-author">
+            <p class="text-black mb-0"><strong><%= book.book_title %></strong></p>
+            <p class="text-black"><em><%= book.book_author %></em></p>
+          </div>
+          <p class="text-black mb-0 card-note"><%= book.note %></p>
+          <img class="card-cover" src="<%= book.book_cover %>" alt="book cover">
+          <p class="text-grey mb-0 card-isbn"><%= book.book_isbn %></p>
         </div>
-        <p class="text-black mb-0"><strong><%= book.book_title %></strong></p>
-        <p class="text-black mb-0"><em><%= book.book_author %></em></p>
-        <p class="text-black"><%= book.summary %></p>
-        <p class="text-black"><%= book.note %></p>
-        <img src="https://d827xgdhgqbnd.cloudfront.net/wp-content/uploads/2016/04/09121712/book-cover-placeholder.png" alt="book cover" width="100" height="150">
-        <%#= book.book_cover %>
-        <p class="text-grey"><%= book.book_isbn %></p>
       </div>
     <% }); %>
   <% } else { %>

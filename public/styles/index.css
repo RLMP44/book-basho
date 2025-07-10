@@ -107,19 +107,12 @@ footer {
   display: flex;
 }
 
-.card-top {
-  display: grid;
-  grid-template-columns: 5fr 5fr 2fr;
-  justify-items: end;
-}
-
 .book-card {
   display: flex;
   flex-direction: column;
   margin-bottom: 1rem;
   padding: 1rem;
 }
-
 
 .outline {
   position: relative;
@@ -130,7 +123,7 @@ footer {
 .outline::before {
   content: "";
   position: absolute;
-  top: 2%;
+  top: 1%;
   left: -3%;
   width: 103%;
   height: 2px;
@@ -140,9 +133,58 @@ footer {
 .outline::after {
   content: "";
   position: absolute;
-  top: -3%;
+  top: -1%;
   left: -0.5%;
   width: 2px;
-  height: 100%;
+  height: 99%;
   background-color: black;
+}
+
+.card-body {
+  display: grid;
+  grid-template-columns: 5fr 5fr 2fr;
+  grid-gap: 0rem 1rem;
+  background-color: var(--main-brown);
+}
+
+.card-rating {
+  grid-area: 1 / 1 / 2 / 2;
+  display: flex;
+}
+
+.card-read {
+  grid-area: 1 / 2 / 2 / 3;
+  display: flex;
+  justify-self: flex-end;
+}
+
+.card-buttons {
+  grid-area: 1 / 3 / 2 / 4;
+  display: flex;
+  justify-self: flex-end;
+}
+
+.card-title-author {
+  grid-area: 2 / 1 / 3 / 3;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-note {
+  grid-area: 3 / 1 / 7 / 3;
+  align-self: flex-start;
+}
+
+.card-cover {
+  grid-area: 2 / 3 / 5 / -1;
+  display: flex;
+  justify-self: flex-end;
+  max-width: 200px;
+  max-height: 320px;
+}
+
+.card-isbn {
+  grid-area: 5 / 3 / 6 / -1;
+  display: flex;
+  justify-self: flex-end;
 }
