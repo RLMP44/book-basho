@@ -1,9 +1,9 @@
 <%- include('partials/header.ejs'); -%>
 
-<div class="container">
+<div class="container outline">
   <% if (locals.data) {  %>
     <% data.forEach((book) => { %>
-      <div class="container book-card">
+      <div class="book-card">
         <div class="card-top">
           <p class="text-grey" style="justify-self: flex-start">Rating: <%= book.rating %>/10</p>
           <p class="text-grey">Read: <%= book.date_started.getMonth() %>/<%= book.date_started.getFullYear() %>-<%= book.date_finished.getMonth() %>/<%= book.date_finished.getFullYear() %></p>

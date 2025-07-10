@@ -55,7 +55,6 @@ body {
   height: 4.5rem;
   display: flex;
   justify-content: center;
-  margin-bottom: 1rem;
 }
 
 .title-text {
@@ -98,7 +97,6 @@ footer {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 1rem;
 }
 
 .book-card {
@@ -119,4 +117,32 @@ footer {
   display: flex;
   flex-direction: column;
   margin-bottom: 1rem;
+  padding: 1rem;
+}
+
+
+.outline {
+  position: relative;
+  padding: 2rem 2rem;
+  margin: 2rem 0rem 1rem 0rem;
+}
+
+.outline::before {
+  content: "";
+  position: absolute;
+  top: 2%;
+  left: -3%;
+  width: 103%;
+  height: 2px;
+  background-color: black;
+}
+
+.outline::after {
+  content: "";
+  position: absolute;
+  top: -3%;
+  left: -0.5%;
+  width: 2px;
+  height: 100%;
+  background-color: black;
 }

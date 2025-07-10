@@ -28,21 +28,21 @@ const currentUserId = 1;
 async function getUserBooks() {
   const query = `
     SELECT
-      rb.rating,
-      rb.date_started,
-      rb.date_finished,
-      rb.note,
-      rb.summary,
+      n.rating,
+      n.date_started,
+      n.date_finished,
+      n.note,
+      n.summary,
       book.title AS book_title,
       book.cover AS book_cover,
       book.author AS book_author,
       book.isbn AS book_isbn,
       users.name AS user_name
-    FROM read_book rb
-    JOIN book ON rb.book_id = book.id
-    JOIN users ON rb.user_id = users.id
+    FROM note n
+    JOIN book ON n.book_id = book.id
+    JOIN users ON n.user_id = users.id
     WHERE user_id = $1;
-  `
+  `;
   const results = await db.query(query, [currentUserId]);
   return results.rows;
 }
@@ -57,7 +57,28 @@ app.get("/", async (req, res) => {
 });
 
 app.get("/notes/:id", async (req, res) => {
-  // TODO: add notes show page
+  // const readBookId = req.body.noteId;
+  try {
+    const query = `
+      SELECT
+        n.rating,
+        n.date_started,
+        n.date_finished,
+        n.note,
+        n.summary,
+        book.title AS book_title,
+        book.cover AS book_cover,
+        book.author AS book_author,
+        book.isbn AS book_isbn
+      FROM note n
+      JOIN book ON n.book_id = book.id
+      WHERE n.id = $1;
+    `;
+    const results = await db.query(query, [2]);
+    res.render("show.ejs", { data: results.rows[0] });
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 app.post("/add", async (req, res) => {
