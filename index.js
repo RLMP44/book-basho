@@ -41,7 +41,8 @@ async function getUserBooks() {
     FROM note n
     JOIN book ON n.book_id = book.id
     JOIN users ON n.user_id = users.id
-    WHERE user_id = $1;
+    WHERE user_id = $1
+    ORDER BY n.rating DESC;
   `;
   const results = await db.query(query, [currentUserId]);
   return results.rows;
