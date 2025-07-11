@@ -8,7 +8,9 @@
         <p class="text-grey card-read">Read: <%= data.date_started.getMonth() %>/<%= data.date_started.getFullYear() %>-<%= data.date_finished.getMonth() %>/<%= data.date_finished.getFullYear() %></p>
         <div class="card-buttons card-buttons-container">
           <btn class="button edit-button">🖊️</btn>
-          <btn class="button delete-button">🗑️</btn>
+          <form class="note-form" action="/notes/<%= data.id %>/delete" method="post">
+            <button class="button delete-button" type="submit">🗑️</button>
+          </form>
         </div>
         <div class="card-title-author">
           <p class="text-black mb-0"><strong><%= data.book_title %></strong></p>
