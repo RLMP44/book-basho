@@ -28,6 +28,7 @@ const currentUserId = 1;
 async function getUserBooks() {
   const query = `
     SELECT
+      n.id,
       n.rating,
       n.date_started,
       n.date_finished,
@@ -58,10 +59,11 @@ app.get("/", async (req, res) => {
 });
 
 app.get("/notes/:id", async (req, res) => {
-  // const readBookId = req.body.noteId;
+  const noteId = req.params.id;
   try {
     const query = `
       SELECT
+        n.id,
         n.rating,
         n.date_started,
         n.date_finished,
@@ -75,7 +77,7 @@ app.get("/notes/:id", async (req, res) => {
       JOIN book ON n.book_id = book.id
       WHERE n.id = $1;
     `;
-    const results = await db.query(query, [2]);
+    const results = await db.query(query, [noteId]);
     res.render("show.ejs", { data: results.rows[0] });
   } catch (error) {
     console.log(error);
