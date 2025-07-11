@@ -9,6 +9,9 @@
   --main-brown: rgba(218, 190, 142, 1);
   --main-white: rgba(243, 238, 234, 1);
   --main-dark-green: rgba(171, 159, 102, 1);
+  --hover-dark-green: rgb(136, 128, 82);
+  --button-red: rgba(230, 82, 82, 1);
+  --hover-red: rgba(184, 66, 66, 1);
 }
 
 .julee-regular {
@@ -104,15 +107,12 @@ footer {
   background-color: var(--main-brown);
 }
 
-.card-buttons-container {
-  display: flex;
-}
-
 .book-card {
   display: flex;
   flex-direction: column;
   margin-bottom: 1rem;
   padding: 1rem;
+  box-shadow: 1px 1px 2px rgba(71, 71, 71, 1);
 }
 
 .outline {
@@ -172,20 +172,23 @@ footer {
 }
 
 .card-note {
-  grid-area: 3 / 1 / 7 / 3;
+  grid-area: 3 / 1 / 5 / 3;
   align-self: flex-start;
 }
 
 .card-cover {
-  grid-area: 2 / 3 / 5 / -1;
+  grid-area: 2 / 3 / 6 / -1;
   display: flex;
   justify-self: flex-end;
+  align-self: center;
+  width: 75%;
+  height: auto;
   max-width: 200px;
   max-height: 320px;
 }
 
 .card-isbn {
-  grid-area: 5 / 3 / 6 / -1;
+  grid-area: 2 / 2 / 3 / 3;
   display: flex;
   justify-self: flex-end;
 }
@@ -205,6 +208,33 @@ footer {
 }
 
 .note-link:hover {
-  background-color: rgb(155, 145, 93);
+  background-color: var(--hover-dark-green);
+  transition: .5s;
+}
+
+.button {
+  padding: .5rem;
+  border-radius: 50%;
+  box-shadow: 1px 1px 2px var(--text-grey);
+  margin: 4px 1rem;
+}
+
+.edit-button {
+  background-color: var(--main-dark-green);
+  margin: 0rem 4px 4px 0rem;
+}
+
+.edit-button:hover {
+  background-color: var(--hover-dark-green);
+  transition: .5s;
+}
+
+.delete-button {
+  background-color: var(--button-red);
+  margin: 0rem 0rem 4px 4px;
+}
+
+.delete-button:hover {
+  background-color: var(--hover-red);
   transition: .5s;
 }
