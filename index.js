@@ -34,6 +34,7 @@ async function getUserBooks() {
       n.date_finished,
       n.note,
       n.summary,
+      n.user_id,
       book.title AS book_title,
       book.cover AS book_cover,
       book.author AS book_author,
@@ -69,6 +70,7 @@ app.get("/notes/:id", async (req, res) => {
         n.date_finished,
         n.note,
         n.summary,
+        n.user_id,
         book.title AS book_title,
         book.cover AS book_cover,
         book.author AS book_author,
@@ -92,8 +94,14 @@ app.post("/notes/:id/edit", async (req, res) => {
   // TODO: add notes edit page
 });
 
-app.post("/notes/:id/delete", (req, res) => {
-  // TODO: delete capabilities
+app.post("/notes/:id/delete", async (req, res) => {
+  try {
+    const idToDelete = req.params.id;
+    await db.query('DELETE FROM note WHERE id = $1', [idToDelete]);
+    res.redirect("/");
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 app.listen(port, () => {

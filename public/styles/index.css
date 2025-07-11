@@ -217,6 +217,7 @@ footer {
   border-radius: 50%;
   box-shadow: 1px 1px 2px var(--text-grey);
   margin: 4px 1rem;
+  border: none;
 }
 
 .edit-button {
