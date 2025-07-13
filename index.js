@@ -91,6 +91,13 @@ app.post("/add", async (req, res) => {
 });
 
 app.post("/notes/:id/edit", async (req, res) => {
+  try {
+    const idToEdit = req.params.id;
+    console.log(req.params)
+    console.log(idToEdit);
+  } catch (error) {
+    console.log(error);
+  }
   // TODO: add notes edit page
 });
 
