@@ -132,7 +132,7 @@ footer {
 .outline::after {
   content: "";
   position: absolute;
-  top: -3%;
+  top: -2vh;
   left: -0.5%;
   width: 2px;
   height: 99%;
@@ -292,4 +292,26 @@ footer {
 .close.warp::before,
 .close.warp::after {
   border-radius: 120% 0;
+}
+
+.edit-note {
+  height: 300px;
+  width: 800px;
+  padding: .5rem;
+  border: none;
+  text-wrap: wrap;
+  background-color: var(--main-white);
+}
+
+.form-container {
+  background-color: var(--main-brown);
+  padding: 1rem 1rem 1.5rem 1rem;
+  margin-bottom: 1rem;
+  max-width: 900px;
+}
+
+.edit-nums {
+  padding: .5rem;
+  border: none;
+  background-color: var(--main-white);
 }

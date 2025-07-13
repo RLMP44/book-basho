@@ -50,6 +50,28 @@ async function getUserBooks() {
   return results.rows;
 }
 
+async function getNote(noteId) {
+  const query = `
+    SELECT
+      n.id,
+      n.rating,
+      n.date_started,
+      n.date_finished,
+      n.note,
+      n.summary,
+      n.user_id,
+      book.title AS book_title,
+      book.cover AS book_cover,
+      book.author AS book_author,
+      book.isbn AS book_isbn
+    FROM note n
+    JOIN book ON n.book_id = book.id
+    WHERE n.id = $1;
+  `;
+  const results = await db.query(query, [noteId]);
+  return results.rows[0]
+}
+
 app.get("/", async (req, res) => {
   try {
     const data = await getUserBooks();
@@ -62,25 +84,8 @@ app.get("/", async (req, res) => {
 app.get("/notes/:id", async (req, res) => {
   const noteId = req.params.id;
   try {
-    const query = `
-      SELECT
-        n.id,
-        n.rating,
-        n.date_started,
-        n.date_finished,
-        n.note,
-        n.summary,
-        n.user_id,
-        book.title AS book_title,
-        book.cover AS book_cover,
-        book.author AS book_author,
-        book.isbn AS book_isbn
-      FROM note n
-      JOIN book ON n.book_id = book.id
-      WHERE n.id = $1;
-    `;
-    const results = await db.query(query, [noteId]);
-    res.render("show.ejs", { data: results.rows[0] });
+    const results = await getNote(noteId);
+    res.render("show.ejs", { data: results });
   } catch (error) {
     console.log(error);
   }
@@ -93,8 +98,8 @@ app.post("/add", async (req, res) => {
 app.post("/notes/:id/edit", async (req, res) => {
   try {
     const idToEdit = req.params.id;
-    console.log(req.params)
-    console.log(idToEdit);
+    const results = await getNote(idToEdit);
+    res.render("edit.ejs", { data: results })
   } catch (error) {
     console.log(error);
   }
