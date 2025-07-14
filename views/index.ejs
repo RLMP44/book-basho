@@ -8,7 +8,7 @@
           <p class="text-grey card-rating" style="justify-self: flex-start">Rating: <%= note.rating %>/10</p>
           <p class="text-grey card-read">Read: <%= note.date_started.getMonth() %>/<%= note.date_started.getFullYear() %>-<%= note.date_finished.getMonth() %>/<%= note.date_finished.getFullYear() %></p>
           <div class="card-buttons card-buttons-container">
-            <form class="note-form" action="/notes/<%= note.id %>/edit" method="post">
+            <form class="note-form" action="/notes/<%= note.id %>/edit" method="get">
               <button class="button edit-button" type="submit">
                 <img class="edit-icon" src="/images/edit-button.png" alt="edit" />
               </button>

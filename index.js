@@ -95,15 +95,25 @@ app.post("/add", async (req, res) => {
   // TODO: add notes
 });
 
+app.get("/notes/:id/edit", async (req, res) => {
+  const idToEdit = req.params.id;
+  res.render("edit.ejs", { data: await getNote(idToEdit) });
+});
+
 app.post("/notes/:id/edit", async (req, res) => {
   try {
     const idToEdit = req.params.id;
-    const results = await getNote(idToEdit);
-    res.render("edit.ejs", { data: results })
+    const query = `
+      UPDATE note
+      SET rating = $1, date_started = $2, date_finished = $3,
+      summary = $4, note = $5
+      WHERE id = $6
+    `;
+    db.query(query, [req.body.updatedRating, req.body.updatedStart, req.body.updatedFinish, req.body.updatedSummary, req.body.updatedNote, idToEdit])
+    res.redirect("/");
   } catch (error) {
     console.log(error);
   }
-  // TODO: add notes edit page
 });
 
 app.post("/notes/:id/delete", async (req, res) => {
