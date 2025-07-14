@@ -46,7 +46,7 @@
   object-fit: cover;
 }
 
-.close {
+.delete {
   position: relative;
   display: inline-block;
   width: 30px;
@@ -55,13 +55,13 @@
   background-color: transparent;
 }
 
-.close:hover::before,
-.close:hover::after {
+.delete:hover::before,
+.delete:hover::after {
   background-color: var(--button-red);
 }
 
-.close::before,
-.close::after {
+.delete::before,
+.delete::after {
   content: '';
   position: absolute;
   height: 2px;
@@ -72,21 +72,21 @@
   background: var(--text-grey);
 }
 
-.close::before {
+.delete::before {
   transform: rotate(45deg);
 }
 
-.close::after {
+.delete::after {
   transform: rotate(-45deg);
 }
 
-.close.black::before,
-.close.black::after {
+.delete.black::before,
+.delete.black::after {
   height: 8px;
   margin-top: -4px;
 }
 
-.close.warp::before,
-.close.warp::after {
+.delete.warp::before,
+.delete.warp::after {
   border-radius: 120% 0;
 }

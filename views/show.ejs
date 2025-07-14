@@ -9,11 +9,11 @@
         <div class="card-buttons card-buttons-container">
           <form class="note-form" action="/notes/<%= data.id %>/edit" method="get">
             <button class="button edit-button" type="submit">
-              <img class="edit-icon" src="/images/edit-button.png" alt="edit" />
+              <img class="edit-icon" src="/images/edit-button.png" title="edit" alt="edit" />
             </button>
           </form>
           <form class="note-form" action="/notes/<%= data.id %>/delete" method="post">
-            <button class="button close warp black" type="submit"></button>
+            <button class="button delete warp black" type="submit" title="delete" alt="delete"></button>
           </form>
         </div>
         <div class="card-title-author">
