@@ -1,0 +1,26 @@
+.outline {
+  min-height: 85vh;
+  position: relative;
+  padding: 2rem 2rem;
+  margin: 2rem 0rem 1rem 0rem;
+}
+
+.outline::before {
+  content: "";
+  position: absolute;
+  top: 1%;
+  left: -3%;
+  width: 103%;
+  height: 2px;
+  background-color: black;
+}
+
+.outline::after {
+  content: "";
+  position: absolute;
+  top: -2vh;
+  left: -0.5%;
+  width: 2px;
+  height: 99%;
+  background-color: black;
+}

@@ -1,0 +1,92 @@
+.note-link {
+  font-size: 16px;
+  font-weight: 200;
+  letter-spacing: 1px;
+  outline: 0;
+  border: 1px solid black;
+  position: relative;
+  background-color: transparent;
+  touch-action: manipulation;
+}
+
+.note-link:after {
+  content: "";
+  background-color: var(--main-dark-green);
+  width: 100%;
+  z-index: -1;
+  position: absolute;
+  height: 100%;
+  top: 7px;
+  left: 7px;
+  transition: 0.2s;
+}
+
+.note-link:hover:after {
+  top: 0px;
+  left: 0px;
+}
+
+@media (min-width: 768px) {
+  .note-link {
+    padding: 13px 50px 13px;
+  }
+}
+
+.button {
+  border: none;
+}
+
+.edit-button {
+  background-color: transparent;
+}
+
+.edit-icon {
+  width: 26px;
+  height: 26px;
+  object-fit: cover;
+}
+
+.close {
+  position: relative;
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  overflow: hidden;
+  background-color: transparent;
+}
+
+.close:hover::before,
+.close:hover::after {
+  background-color: var(--button-red);
+}
+
+.close::before,
+.close::after {
+  content: '';
+  position: absolute;
+  height: 2px;
+  width: 100%;
+  top: 50%;
+  left: 0;
+  margin-top: -1px;
+  background: var(--text-grey);
+}
+
+.close::before {
+  transform: rotate(45deg);
+}
+
+.close::after {
+  transform: rotate(-45deg);
+}
+
+.close.black::before,
+.close.black::after {
+  height: 8px;
+  margin-top: -4px;
+}
+
+.close.warp::before,
+.close.warp::after {
+  border-radius: 120% 0;
+}
