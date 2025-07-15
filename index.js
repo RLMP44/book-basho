@@ -25,8 +25,8 @@ app.use(express.static("public"));
 
 const currentUserId = 1;
 
-async function getUserBooks(filter = 'rating', order = 'DESC') {
-  const query = `
+async function getUserBooks({ filterBy = 'rating', orderBy = 'DESC', filter = true, search = false, searchInput = '' } = {}) {
+  const queryBase = `
     SELECT
       n.id,
       n.rating,
@@ -44,9 +44,23 @@ async function getUserBooks(filter = 'rating', order = 'DESC') {
     JOIN book ON n.book_id = book.id
     JOIN users ON n.user_id = users.id
     WHERE user_id = $1
-    ORDER BY n.${filter} ${order};
   `;
-  const results = await db.query(query, [currentUserId]);
+
+  var queryParams = ``;
+  var params = [currentUserId];
+
+  if (filter) {
+    queryParams = `ORDER BY n.${filterBy} ${orderBy};`
+  } else if (search) {
+    queryParams = `
+    AND book.title ILIKE '%' || $2 || '%'
+    OR book.author ILIKE '%' || $2 || '%';
+    `;
+    params.push(searchInput);
+  };
+
+  const query = queryBase + queryParams;
+  const results = await db.query(query, params);
   return results.rows;
 }
 
@@ -86,7 +100,17 @@ app.get("/filter", async (req, res) => {
     const userInputs = req.query.filterParams.split(' ');
     const filter = userInputs[0];
     const order = userInputs[1];
-    const data = await getUserBooks(filter, order)
+    const data = await getUserBooks({ filterBy: filter, orderBy: order })
+    res.render("index.ejs", { data: data });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+app.get("/search", async (req, res) => {
+  try {
+    const userInput = req.query.searchInput;
+    const data = await getUserBooks({ filter: false, search: true, searchInput: userInput })
     res.render("index.ejs", { data: data });
   } catch (error) {
     console.log(error);
