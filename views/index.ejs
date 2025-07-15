@@ -1,38 +1,46 @@
 <%- include('partials/header.ejs'); -%>
 
-<div class="container outline">
-  <% if (locals.data) {  %>
-    <% data.forEach((note) => { %>
-      <div class="book-card">
-        <div class="card-body">
-          <p class="text-grey card-rating" style="justify-self: flex-start">Rating: <%= note.rating %>/10</p>
-          <p class="text-grey card-read">Read: <%= note.date_started.getMonth() %>/<%= note.date_started.getFullYear() %>-<%= note.date_finished.getMonth() %>/<%= note.date_finished.getFullYear() %></p>
-          <div class="card-buttons card-buttons-container">
-            <form class="note-form" action="/notes/<%= note.id %>/edit" method="get">
-              <button class="button edit-button" type="submit">
-                <img class="edit-icon" src="/images/edit-button.png" title="edit" alt="edit" />
-              </button>
-            </form>
-            <form class="note-form" action="/notes/<%= note.id %>/delete" method="post">
-              <button class="button delete warp black" type="submit" title="delete" alt="delete"></button>
+<div class="main-content">
+  <!-- --------------------- searchbar & sidebar --------------------- -->
+  <%- include('partials/searchbar.ejs'); -%>
+  <div class="sidebar">
+    Sidebar here
+  </div>
+  <!-- --------------------- main content --------------------- -->
+  <div class="container outline">
+    <% if (locals.data) {  %>
+      <% data.forEach((note) => { %>
+        <div class="book-card">
+          <div class="card-body">
+            <p class="text-grey card-rating" style="justify-self: flex-start">Rating: <%= note.rating %>/10</p>
+            <p class="text-grey card-read">Read: <%= note.date_started.getMonth() %>/<%= note.date_started.getFullYear() %>-<%= note.date_finished.getMonth() %>/<%= note.date_finished.getFullYear() %></p>
+            <div class="card-buttons card-buttons-container">
+              <form class="note-form" action="/notes/<%= note.id %>/edit" method="get">
+                <button class="button edit-button" type="submit">
+                  <img class="edit-icon" src="/images/edit-button.png" title="edit" alt="edit" />
+                </button>
+              </form>
+              <form class="note-form" action="/notes/<%= note.id %>/delete" method="post">
+                <button class="button delete warp black" type="submit" title="delete" alt="delete"></button>
+              </form>
+            </div>
+            <div class="card-title-author">
+              <p class="text-black mb-0"><strong><%= note.book_title %></strong></p>
+              <p class="text-black"><em><%= note.book_author %></em></p>
+            </div>
+            <p class="text-black mb-0 card-note"><%= note.summary %></p>
+            <img class="card-cover" src="<%= note.book_cover %>" alt="book cover">
+            <p class="text-grey mb-0 card-isbn">ISBN: <%= note.book_isbn %></p>
+            <form class="note-form" action="/notes/<%= note.id %>" method="get">
+              <button class="main-button btn-lg card-button" type="submit" alt="View notes">Notes</button>
             </form>
           </div>
-          <div class="card-title-author">
-            <p class="text-black mb-0"><strong><%= note.book_title %></strong></p>
-            <p class="text-black"><em><%= note.book_author %></em></p>
-          </div>
-          <p class="text-black mb-0 card-note"><%= note.summary %></p>
-          <img class="card-cover" src="<%= note.book_cover %>" alt="book cover">
-          <p class="text-grey mb-0 card-isbn">ISBN: <%= note.book_isbn %></p>
-          <form class="note-form" action="/notes/<%= note.id %>" method="get">
-            <button class="note-link" type="submit" alt="View notes">Notes</button>
-          </form>
         </div>
-      </div>
-    <% }); %>
-  <% } else { %>
-    <p>error</p>
-  <% } %>
+      <% }); %>
+    <% } else { %>
+      <p>No titles available</p>
+    <% } %>
+  </div>
 </div>
 
 <%- include('partials/footer.ejs'); -%>

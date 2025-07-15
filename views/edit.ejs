@@ -1,12 +1,12 @@
 <%- include('partials/header.ejs'); -%>
 
-<div class="container outline" style="max-width: fit-content;">
+<div class="container outline show" style="max-width: fit-content;">
   <% if (locals.data) {  %>
     <div class="d-flex form-container justify-content-center">
       <form class="note-form" style="flex-direction: column;" action="/notes/<%= data.id %>/edit" method="post">
         <input type="hidden" name="updatedItemId" value="<%= data.id %>" required>
         <label for="rating"><strong>Rating: </strong></label>
-        <select type="radio" id="rating" class="edit-nums" name="updatedRating" value="<%= data.rating %>" required>
+        <select type="radio" id="rating" class="form-basic" name="updatedRating" value="<%= data.rating %>" required>
           <option value="1">1</option>
           <option value="2">2</option>
           <option value="3">3</option>
@@ -19,14 +19,14 @@
           <option value="10">10</option>
         </select><br>
         <label for="start"><strong>Started on: </strong></label>
-        <input type="date" id="start" name="updatedStart" class="edit-nums" value="<%= data.start_date %>"><br>
+        <input type="date" id="start" name="updatedStart" class="form-basic" value="<%= data.start_date %>"><br>
         <label for="finish"><strong>Finished on: </strong></label>
-        <input type="date" id="finish" name="updatedFinish" class="edit-nums" value="<%= data.finish_date %>" required><br>
+        <input type="date" id="finish" name="updatedFinish" class="form-basic" value="<%= data.finish_date %>" required><br>
         <label for="note"><strong>Note: </strong></label>
-        <textarea name="updatedNote" class="edit-note" rows="14" cols="10" wrap="soft" style="overflow-y: scroll; resize: none;"><%= data.note %></textarea><br>
+        <textarea name="updatedNote" class="edit-note form-basic" rows="14" cols="10" wrap="soft" style="overflow-y: scroll; resize: none;"><%= data.note %></textarea><br>
         <label for="summary"><strong>Summary: </strong></label>
-        <textarea name="updatedSummary" class="edit-note" rows="14" cols="10" wrap="soft" style="overflow-y: scroll; resize: none;"><%= data.summary %></textarea><br>
-        <button class="note-link" type="submit">Save</button>
+        <textarea name="updatedSummary" class="edit-note form-basic" rows="14" cols="10" wrap="soft" style="overflow-y: scroll; resize: none;"><%= data.summary %></textarea><br>
+        <button class="main-button btn-lg" type="submit">Save</button>
       </form>
     </div>
   <% } else { %>

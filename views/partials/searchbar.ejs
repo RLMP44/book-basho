@@ -1,0 +1,33 @@
+<div class="search-bar mt-4">
+  <form class="searchbar-form" action="/search" method="get">
+    <div class="searchbar-label">
+      <label for="searchInput"><strong>Search: </strong></label>
+    </div>
+    <div class="searchbar-input">
+      <input type="text" class="form-basic searchbar-input" name="searchInput" title="search input">
+    </div>
+    <div class="searchbar-button">
+      <button class="main-button btn-sm searchbar-button" type="submit">
+        Search
+      </button>
+    </div>
+  </form><br>
+  <form class="searchbar-form" action="/filter" method="get">
+    <div class="searchbar-label">
+      <label for="filterParams"><strong>Filter by: </strong></label>
+    </div>
+    <div class="searchbar-input">
+      <select type="radio" class="form-basic searchbar-input" name="filterParams" title="filter input">
+        <option value="rating DESC">Rating (highest to lowest)</option>
+        <option value="rating ASC">Rating (lowest to highest)</option>
+        <option value="date_finished DESC">Recency (newest to oldest)</option>
+        <option value="date_finished ASC">Recency (oldest to newest)</option>
+      </select>
+    </div>
+    <div class="searchbar-button">
+      <button class="main-button btn-sm searchbar-button" type="submit">
+        Filter
+      </button>
+    </div>
+  </form>
+</div>

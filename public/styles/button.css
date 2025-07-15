@@ -1,4 +1,4 @@
-.note-link {
+.main-button {
   font-size: 16px;
   font-weight: 200;
   letter-spacing: 1px;
@@ -9,7 +9,7 @@
   touch-action: manipulation;
 }
 
-.note-link:after {
+.main-button:after {
   content: "";
   background-color: var(--main-dark-green);
   width: 100%;
@@ -21,19 +21,31 @@
   transition: 0.2s;
 }
 
-.note-link:hover:after {
+.main-button:hover:after {
   top: 0px;
   left: 0px;
 }
 
 @media (min-width: 768px) {
-  .note-link {
+  .btn-lg {
     padding: 13px 50px 13px;
+  }
+
+  .btn-sm {
+    padding: 3px 23px 3px;
   }
 }
 
 .button {
   border: none;
+}
+
+.card-button {
+  margin-top: .5rem;
+}
+
+.searchbar-button {
+  margin: 0rem .5rem;
 }
 
 .edit-button {
