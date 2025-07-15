@@ -13,7 +13,7 @@
   top: 1%;
   left: -3%;
   width: 103%;
-  height: 2px;
+  height: .1rem;
   background-color: black;
 }
 
@@ -22,7 +22,7 @@
   position: absolute;
   top: -2vh;
   left: -0.5%;
-  width: 2px;
+  width: .1rem;
   height: 99%;
   background-color: black;
 }
@@ -55,7 +55,7 @@
   position: absolute;
   top: 10%;
   left: 0%;
-  width: 1px;
+  width: .05rem;
   height: 80%;
   background-color: black;
 }
@@ -65,7 +65,7 @@
   position: absolute;
   top: 10%;
   right: 0%;
-  width: 1px;
+  width: .05rem;
   height: 80%;
   background-color: black;
 }

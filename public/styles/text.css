@@ -58,7 +58,7 @@
   top: 5px;
   left: -5%;
   width: 110%;
-  height: 1px;
+  height: .1rem;
   background-color: black;
 }
 
@@ -68,6 +68,6 @@
   bottom: 5px;
   left: 6%;
   width: 90%;
-  height: 1px;
+  height: .1rem;
   background-color: black;
 }
