@@ -26,11 +26,23 @@ body {
   justify-content: center;
 }
 
-footer {
+.custom-footer {
   background-color: var(--main-green);
   width: 100vw;
-  height: 3rem;
+  height: auto;
+  max-height: 64px;
+  padding: .5rem 0rem;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.custom-footer p {
+  margin: 0;
+}
+
+.custom-footer a {
+  text-decoration: none;
+  color: inherit;
 }
