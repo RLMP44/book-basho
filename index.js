@@ -25,7 +25,7 @@ app.use(express.static("public"));
 
 const currentUserId = 1;
 
-async function getUserBooks() {
+async function getUserBooks(filter = 'rating', order = 'DESC') {
   const query = `
     SELECT
       n.id,
@@ -44,7 +44,7 @@ async function getUserBooks() {
     JOIN book ON n.book_id = book.id
     JOIN users ON n.user_id = users.id
     WHERE user_id = $1
-    ORDER BY n.rating DESC;
+    ORDER BY n.${filter} ${order};
   `;
   const results = await db.query(query, [currentUserId]);
   return results.rows;
@@ -75,6 +75,18 @@ async function getNote(noteId) {
 app.get("/", async (req, res) => {
   try {
     const data = await getUserBooks();
+    res.render("index.ejs", { data: data });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+app.get("/filter", async (req, res) => {
+  try {
+    const userInputs = req.query.filterParams.split(' ');
+    const filter = userInputs[0];
+    const order = userInputs[1];
+    const data = await getUserBooks(filter, order)
     res.render("index.ejs", { data: data });
   } catch (error) {
     console.log(error);
