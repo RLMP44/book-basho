@@ -3,6 +3,7 @@
 @import "text.css";
 @import "form.css";
 @import "container.css";
+@import "queries.css";
 
 /* CSS Reset */
 * {

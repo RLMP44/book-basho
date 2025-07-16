@@ -34,7 +34,7 @@
   grid-gap: 1rem;
   background-image: url('/images/outline-girl.png');
   background-repeat: no-repeat;
-  background-size: 308px 400px;
+  background-size: auto 25vw;
   background-color: var(--main-white);
 }
 

@@ -1,0 +1,66 @@
+/* Extra small devices (phones) */
+@media (max-width: 576px) {
+  /* Styles for very small screens */
+}
+
+/* Small devices (portrait tablets and large phones) */
+@media (min-width: 577px) and (max-width: 768px) {
+  /* Styles for small tablets and phones */
+}
+
+/* Medium devices (landscape tablets) */
+@media (min-width: 769px) and (max-width: 992px) {
+  /* Styles for tablets */
+}
+
+/* Large devices (desktops and laptops) */
+@media (min-width: 993px) and (max-width: 1200px) {
+  .main-content {
+    grid-template-columns: 20% 8fr 20%;
+    background-size: auto 25vw;
+  }
+
+  .search-bar {
+    grid-area: 2 / 2 / 3 / 3;
+  }
+
+  .outline {
+    width: 75% !important;
+    min-height: 85vh;
+    grid-area: 3 / 2 / 6 / -1;
+  }
+
+  .sidebar {
+    grid-area: 1 / 2 / 2 / 2;
+  }
+
+  .card-cover {
+    grid-area: 2 / 3 / 4 / -1;
+    align-self: flex-end;
+    width: 95%;
+    height: auto;
+  }
+
+  .note-form {
+    grid-area: 4 / 3 / 5 / 4;
+  }
+
+  .sidebar::before {
+    top: 0%;
+    left: 10%;
+    width: 80%;
+    height: .05rem;
+  }
+
+  .sidebar::after {
+    top: 100%;
+    left: 10%;
+    width: 80%;
+    height: .05rem;
+  }
+}
+
+/* Extra large devices (larger screens) */
+@media (min-width: 1201px) {
+  /* Styles for wide desktop displays */
+}
