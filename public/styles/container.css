@@ -31,7 +31,6 @@
   display: grid;
   grid-template-columns: 20% 8fr 20%;
   grid-template-rows: auto auto auto auto auto;
-  grid-gap: 1rem;
   background-image: url('/images/outline-girl.png');
   background-repeat: no-repeat;
   background-size: auto 25vw;

@@ -1,11 +1,39 @@
 /* Extra small devices (phones) */
 @media (max-width: 576px) {
   /* Styles for very small screens */
+  .outline {
+    grid-area: 2 / 1 / 6 / -1;
+  }
 }
 
 /* Small devices (portrait tablets and large phones) */
 @media (min-width: 577px) and (max-width: 768px) {
   /* Styles for small tablets and phones */
+}
+
+@media (max-width: 768px) {
+  .minimize-txt {
+    font-size: .75rem;
+  }
+
+  .container {
+    max-width: -webkit-fill-available !important;
+  }
+
+  .outline {
+    width: 90% !important;
+    min-height: 85vh;
+    position: relative;
+    padding: 2rem 2rem;
+    margin: 2rem 2rem 1rem 2rem !important;
+    grid-area: 3 / 1 / 4 / 4;
+  }
+}
+
+@media (min-width: 768px) {
+  .btn-sm {
+    padding: 3px 23px 3px;
+  }
 }
 
 /* Medium devices (landscape tablets) */
@@ -20,6 +48,10 @@
 
 /* Extra large devices (larger screens) */
 @media (min-width: 1201px) {
+  .main-content {
+    grid-gap: 1rem;
+  }
+
   .search-bar {
     grid-area: 1 / 2 / 2 / 3;
   }
