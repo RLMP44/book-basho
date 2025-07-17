@@ -15,52 +15,45 @@
 
 /* Large devices (desktops and laptops) */
 @media (min-width: 993px) and (max-width: 1200px) {
-  .main-content {
-    grid-template-columns: 20% 8fr 20%;
-    background-size: auto 25vw;
-  }
 
-  .search-bar {
-    grid-area: 2 / 2 / 3 / 3;
-  }
-
-  .outline {
-    width: 75% !important;
-    min-height: 85vh;
-    grid-area: 3 / 2 / 6 / -1;
-  }
-
-  .sidebar {
-    grid-area: 1 / 2 / 2 / 2;
-  }
-
-  .card-cover {
-    grid-area: 2 / 3 / 4 / -1;
-    align-self: flex-end;
-    width: 95%;
-    height: auto;
-  }
-
-  .note-form {
-    grid-area: 4 / 3 / 5 / 4;
-  }
-
-  .sidebar::before {
-    top: 0%;
-    left: 10%;
-    width: 80%;
-    height: .05rem;
-  }
-
-  .sidebar::after {
-    top: 100%;
-    left: 10%;
-    width: 80%;
-    height: .05rem;
-  }
 }
 
 /* Extra large devices (larger screens) */
 @media (min-width: 1201px) {
-  /* Styles for wide desktop displays */
+  .search-bar {
+    grid-area: 1 / 2 / 2 / 3;
+  }
+
+  .outline {
+    grid-area: 2 / 2 / 6 / -1;
+  }
+
+  .sidebar {
+    grid-area: 3 / 1 / 4 / 2;
+  }
+
+  .sidebar::before {
+    top: 10%;
+    left: 0%;
+    width: .05rem;
+    height: 80%;
+  }
+
+  .sidebar::after {
+    top: 10%;
+    left: 100%;
+    width: .05rem;
+    height: 80%;
+  }
+
+  .card-cover {
+    grid-area: 2 / 3 / 6 / -1;
+    align-self: center;
+    width: 75%;
+    height: auto;
+  }
+
+  .note-form {
+    grid-area: 5 / 2 / 6 / 3;
+  }
 }

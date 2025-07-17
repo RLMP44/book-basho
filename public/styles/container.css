@@ -4,7 +4,7 @@
   position: relative;
   padding: 2rem 2rem;
   margin: 2rem 0rem 1rem 0rem !important;
-  grid-area: 2 / 2 / 6 / -1;
+  grid-area: 3 / 2 / 6 / -1;
 }
 
 .outline::before {
@@ -39,7 +39,7 @@
 }
 
 .search-bar {
-  grid-area: 1 / 2 / 2 / 3;
+  grid-area: 2 / 2 / 3 / 3;
   background-color: var(--main-green);
   padding: 1rem;
   min-width: 300px;
@@ -73,7 +73,7 @@
 }
 
 .sidebar {
-  grid-area: 3 / 1 / 4 / 2;
+  grid-area: 1 / 2 / 2 / 2;
   background-color: var(--main-green);
   position: relative;
   margin: 1rem;
@@ -83,20 +83,20 @@
 .sidebar::before {
   content: "";
   position: absolute;
-  top: 10%;
-  left: 0%;
-  width: .05rem;
-  height: 80%;
+  top: 0%;
+  left: 10%;
+  width: 80%;
+  height: .05rem;
   background-color: black;
 }
 
 .sidebar::after {
   content: "";
   position: absolute;
-  top: 10%;
-  right: 0%;
-  width: .05rem;
-  height: 80%;
+  top: 100%;
+  left: 10%;
+  width: 80%;
+  height: .05rem;
   background-color: black;
 }
 

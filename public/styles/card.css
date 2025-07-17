@@ -45,14 +45,14 @@
 }
 
 .card-cover {
-  grid-area: 2 / 3 / 6 / -1;
   display: flex;
   justify-self: flex-end;
-  align-self: center;
-  width: 75%;
-  height: auto;
   max-width: 155px;
   max-height: 240px;
+  grid-area: 2 / 3 / 4 / -1;
+  align-self: flex-end;
+  width: 95%;
+  height: auto;
 }
 
 .card-isbn {

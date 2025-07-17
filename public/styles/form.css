@@ -1,5 +1,5 @@
 .note-form {
-  grid-area: 5 / 2 / 6 / 3;
+  grid-area: 4 / 3 / 5 / 4;
   display: flex;
   justify-self: flex-end;
   align-self: flex-start;
