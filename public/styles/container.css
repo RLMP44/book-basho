@@ -102,3 +102,7 @@
 .show {
   justify-self: center !important;
 }
+
+.container {
+  max-width: -webkit-fill-available !important;
+}

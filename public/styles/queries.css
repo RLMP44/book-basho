@@ -1,6 +1,10 @@
 /* Extra small devices (phones) */
 @media (max-width: 576px) {
   /* Styles for very small screens */
+  .minimize-txt {
+    font-size: .75rem;
+  }
+
   .outline {
     grid-area: 2 / 1 / 6 / -1;
   }
@@ -101,14 +105,6 @@
 }
 
 @media (max-width: 768px) {
-  .minimize-txt {
-    font-size: .75rem;
-  }
-
-  .container {
-    max-width: -webkit-fill-available !important;
-  }
-
   .outline {
     width: 90% !important;
     min-height: 85vh;

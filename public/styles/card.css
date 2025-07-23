@@ -9,7 +9,7 @@
 
 .card-body {
   display: grid;
-  grid-template-columns: 5fr 5fr 2fr;
+  grid-template-columns: 5fr 4fr 3fr;
   grid-gap: 0rem 1rem;
   background-color: var(--main-brown);
 }
@@ -49,6 +49,7 @@
   justify-self: flex-end;
   max-width: 155px;
   max-height: 240px;
+  min-height: 175px;
   grid-area: 2 / 3 / 4 / -1;
   align-self: flex-end;
   width: 95%;
