@@ -41,3 +41,9 @@
   margin: 0rem .5rem;
   min-width: fit-content;
 }
+
+.edit-form {
+  flex-direction: column;
+  min-width: -webkit-fill-available;
+  position: relative;
+}

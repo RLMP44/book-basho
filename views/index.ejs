@@ -10,8 +10,8 @@
       <% data.forEach((note) => { %>
         <div class="book-card">
           <div class="card-body">
-            <p class="text-grey card-rating" style="justify-self: flex-start">Rating: <%= note.rating %>/10</p>
-            <p class="text-grey card-read">Read: <%= note.date_started.getMonth() %>/<%= note.date_started.getFullYear() %>-<%= note.date_finished.getMonth() %>/<%= note.date_finished.getFullYear() %></p>
+            <p class="text-grey card-rating minimize-txt" style="justify-self: flex-start">Rating: <%= note.rating %>/10</p>
+            <p class="text-grey card-read minimize-txt">Read: <%= note.date_started.getMonth() %>/<%= note.date_started.getFullYear() %>-<%= note.date_finished.getMonth() %>/<%= note.date_finished.getFullYear() %></p>
             <div class="card-buttons card-buttons-container">
               <form class="note-form" action="/notes/<%= note.id %>/edit" method="get">
                 <button class="button edit-button" type="submit">
@@ -23,12 +23,12 @@
               </form>
             </div>
             <div class="card-title-author">
-              <p class="text-black mb-0"><strong><%= note.book_title %></strong></p>
-              <p class="text-black"><em><%= note.book_author %></em></p>
+              <p class="text-black mb-0 minimize-txt"><strong><%= note.book_title %></strong></p>
+              <p class="text-black minimize-txt"><em><%= note.book_author %></em></p>
             </div>
-            <p class="text-black mb-0 card-note"><%= note.summary %></p>
+            <p class="text-black mb-0 card-note minimize-txt"><%= note.summary %></p>
             <img class="card-cover" src="<%= note.book_cover %>" alt="book cover">
-            <p class="text-grey mb-0 card-isbn">ISBN: <%= note.book_isbn %></p>
+            <p class="text-grey mb-0 card-isbn minimize-txt">ISBN: <%= note.book_isbn %></p>
             <form class="note-form" action="/notes/<%= note.id %>" method="get">
               <button class="main-button btn-lg card-button" type="submit" alt="View notes">Notes</button>
             </form>
