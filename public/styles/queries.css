@@ -13,9 +13,14 @@
     font-size: 2rem !important;
   }
 
+  .search-bar, .sidebar {
+    background-color: var(--main-green-transparent);
+  }
+
   .main-content {
     grid-template-columns: 1fr;
     padding: 1rem;
+    background-size: 250px auto;
   }
 
   .outline::after {
@@ -128,6 +133,13 @@
 /* Large devices (desktops and laptops) */
 @media (min-width: 993px) and (max-width: 1200px) {
 
+}
+
+@media (min-width: 769px) and (max-width: 1200px) {
+  .main-content {
+    background-attachment: fixed;
+    background-position: left top 80px;
+  }
 }
 
 /* Extra large devices (larger screens) */

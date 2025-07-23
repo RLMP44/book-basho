@@ -1,0 +1,16 @@
+:root {
+  --font-family-julee: 'Julee', cursive;
+  --font-family-karla: 'Karla', sans-serif;
+  --font-family-inter: 'Inter', sans-serif;
+  --text-dark-green: rgba(171, 159, 102, 1);
+  --text-black: rgba(0, 0, 0, 1);
+  --text-grey: rgba(71, 71, 71, 1);
+  --main-green: rgba(190, 201, 167, 1);
+  --main-green-transparent: rgba(190, 201, 167, .6);
+  --main-brown: rgba(218, 190, 142, 1);
+  --main-white: rgba(242, 237, 233, 1);
+  --main-dark-green: rgba(171, 159, 102, 1);
+  --hover-dark-green: rgb(136, 128, 82);
+  --button-red: rgba(230, 82, 82, 1);
+  --hover-red: rgba(184, 66, 66, 1);
+}
