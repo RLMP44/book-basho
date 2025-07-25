@@ -2,6 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import pg from "pg";
 import dotenv from 'dotenv';
+import axios from "axios";
 
 dotenv.config();
 
@@ -10,6 +11,7 @@ const port = 3000;
 const dbPass = process.env.PG_ADMIN_PASS;
 const dbUser = process.env.PG_ADMIN_USER;
 const dbName = process.env.PG_ADMIN_DB;
+const APIEndpoint = 'https://openlibrary.org/search.json';
 
 const db = new pg.Client({
   user: dbUser,
@@ -64,7 +66,7 @@ async function getUserBooks({ filterBy = 'rating', orderBy = 'DESC', filter = tr
   const query = queryBase + queryParams;
   const results = await db.query(query, params);
   return results.rows;
-}
+};
 
 async function getNote(noteId) {
   const query = `
@@ -86,7 +88,15 @@ async function getNote(noteId) {
   `;
   const results = await db.query(query, [noteId]);
   return results.rows[0]
-}
+};
+
+async function fetchBooks(searchInput) {
+  try {
+    return await axios.get(APIEndpoint + "?q=" + searchInput);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 // ----------------- HTTP requests -----------------
 
@@ -132,13 +142,37 @@ app.get("/notes/:id", async (req, res) => {
   }
 });
 
-app.post("/add", async (req, res) => {
-  console.log("add button pressed");
-});
-
 app.get("/notes/:id/edit", async (req, res) => {
   const idToEdit = req.params.id;
   res.render("edit.ejs", { data: await getNote(idToEdit) });
+});
+
+app.get("/add", async (req, res) => {
+  console.log("add button pressed");
+  res.render("add.ejs");
+});
+
+app.post("/add", async (req, res) => {
+  const data = req.body;
+  console.log(data);
+  res.render("/");
+});
+
+app.post("/search-book", async (req, res) => {
+  console.log("search book button pressed");
+  console.log(req.body.searchInput);
+  // get data from api
+  try {
+    const results = await fetchBooks(req.body.searchInput);
+    // send data from API to frontend to display multiple book options
+    // get user book preference from options
+    // use user preference to choose data from API and send to backend to create book instance
+    // get book instance and send to front end to display
+    res.render("add.ejs", { bookData: results.data.docs })
+  } catch (error) {
+    console.log(error);
+  };
+  // res.render("add.ejs", { bookData: data });
 });
 
 app.post("/notes/:id/edit", async (req, res) => {

@@ -1,0 +1,73 @@
+<%- include('partials/header.ejs'); -%>
+
+<div class="container outline show" style="max-width: 900px !important;">
+  <div class="form-container">
+<!-- ---------------- search form ---------------- -->
+    <form class="searchbar-form mb-2" style="position: relative; z-index: 0;" action="/search-book" method="post">
+      <div class="searchbar-label">
+        <label for="searchInput"><strong>Search: </strong></label>
+      </div>
+      <div class="searchbar-input">
+        <% if (locals.bookData) { %>
+          <select type="radio" id="chosenBook" class="form-basic" name="book" required>
+            <% bookData.forEach((book) => { %>
+              <option
+                value="<%= JSON.stringify({ bookTitle: book.title, bookAuthor: book.author_name[1], coverKey: book.cover_edition_key }) %>">
+                <%= book.title %> - <%= book.author_name[1] %> - <%= book.cover_edition_key %></p>
+              </option>
+            <% }); %>
+          </select>
+        <% } else { %>
+          <input id="searchInput" type="text" class="form-basic searchbar-input minimize-txt" name="searchInput" title="search input" placeholder="Enter book title, author, or ISBN">
+        <% }; %>
+      </div>
+      <div class="searchbar-button">
+        <% if (locals.bookData) { %>
+          <button class="main-button btn-sm searchbar-button minimize-txt" type="submit">
+            Select
+          </button>
+        <% } else { %>
+          <button class="main-button btn-sm searchbar-button minimize-txt" type="submit">
+            Search
+          </button>
+        <% }; %>
+      </div>
+    </form>
+<!-- ---------------- note form ---------------- -->
+    <form class="note-form edit-form" action="/add" method="post">
+      <% if (locals.bookData) { %>
+        <p><strong>Book Title: </strong><br><%= bookData.book_title %></p>
+        <p><strong>Author: </strong><br><%= bookData.book_author %></p>
+      <% } else { %>
+        <p><strong>Book Title: </strong><br></p>
+        <p><strong>Author: </strong><br></p>
+      <% }; %>
+      <input type="hidden" name="itemId" required>
+      <label for="rating"><strong>Rating: </strong></label>
+      <select type="radio" id="rating" class="form-basic" name="rating" required>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+      </select>
+      <br>
+      <label for="start"><strong>Started on: </strong></label>
+      <input type="date" id="start" name="start" class="form-basic"><br>
+      <label for="finish"><strong>Finished on: </strong></label>
+      <input type="date" id="finish" name="finish" class="form-basic" required><br>
+      <label for="note"><strong>Note: </strong></label>
+      <textarea name="note" class="edit-note form-basic" rows="14" cols="10" wrap="soft" style="overflow-y: scroll; resize: none;"></textarea><br>
+      <label for="summary"><strong>Summary: </strong></label>
+      <textarea name="summary" class="edit-note form-basic" rows="14" cols="10" wrap="soft" style="overflow-y: scroll; resize: none;"></textarea><br>
+      <button class="main-button btn-lg" type="submit">Save</button>
+    </form>
+  </div>
+</div>
+
+<%- include('partials/footer.ejs'); -%>
