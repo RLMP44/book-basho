@@ -4,6 +4,8 @@
   <% if (locals.data) {  %>
     <div class="form-container">
       <form class="note-form edit-form" action="/notes/<%= data.id %>/edit" method="post">
+        <p><strong>Book Title: </strong><br><%= data.book_title %></p>
+        <p><strong>Author: </strong><br><%= data.book_author %></p>
         <input type="hidden" name="updatedItemId" value="<%= data.id %>" required>
         <label for="rating"><strong>Rating: </strong></label>
         <select type="radio" id="rating" class="form-basic" name="updatedRating" value="<%= data.rating %>" required>
