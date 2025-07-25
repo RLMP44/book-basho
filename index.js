@@ -25,6 +25,8 @@ app.use(express.static("public"));
 
 const currentUserId = 1;
 
+// ----------------- functions -----------------
+
 async function getUserBooks({ filterBy = 'rating', orderBy = 'DESC', filter = true, search = false, searchInput = '' } = {}) {
   const queryBase = `
     SELECT
@@ -86,6 +88,9 @@ async function getNote(noteId) {
   return results.rows[0]
 }
 
+// ----------------- HTTP requests -----------------
+
+
 app.get("/", async (req, res) => {
   try {
     const data = await getUserBooks();
@@ -128,7 +133,7 @@ app.get("/notes/:id", async (req, res) => {
 });
 
 app.post("/add", async (req, res) => {
-  // TODO: add notes
+  console.log("add button pressed");
 });
 
 app.get("/notes/:id/edit", async (req, res) => {
