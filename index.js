@@ -11,7 +11,6 @@ const port = 3000;
 const dbPass = process.env.PG_ADMIN_PASS;
 const dbUser = process.env.PG_ADMIN_USER;
 const dbName = process.env.PG_ADMIN_DB;
-const APIEndpoint = 'https://openlibrary.org/search.json';
 
 const db = new pg.Client({
   user: dbUser,
@@ -90,14 +89,6 @@ async function getNote(noteId) {
   return results.rows[0]
 };
 
-async function fetchBooks(searchInput) {
-  try {
-    return await axios.get(APIEndpoint + "?q=" + searchInput);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 // ----------------- HTTP requests -----------------
 
 
@@ -159,20 +150,20 @@ app.post("/add", async (req, res) => {
 });
 
 app.post("/search-book", async (req, res) => {
-  console.log("search book button pressed");
   console.log(req.body.searchInput);
   // get data from api
-  try {
-    const results = await fetchBooks(req.body.searchInput);
     // send data from API to frontend to display multiple book options
     // get user book preference from options
     // use user preference to choose data from API and send to backend to create book instance
     // get book instance and send to front end to display
-    res.render("add.ejs", { bookData: results.data.docs })
-  } catch (error) {
-    console.log(error);
-  };
-  // res.render("add.ejs", { bookData: data });
+  // try {
+  //   const results = await fetchBooks(req.body.searchInput);
+  //   console.log(results);
+  //   // res.json(results); // send JSON to frontend
+  // } catch (error) {
+  //   console.log(error);
+  //   res.status(500).json({ error: "Search failed" });
+  // }
 });
 
 app.post("/notes/:id/edit", async (req, res) => {

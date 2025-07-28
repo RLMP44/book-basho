@@ -61,3 +61,20 @@
   display: flex;
   justify-self: flex-end;
 }
+
+.search-book-card {
+  border: 1px solid var(--main-dark-green);
+  margin: 10px 10px 10px 0px;
+  background-color: var(--main-green);
+  padding: .5rem;
+  width: auto;
+  display: flex;
+  justify-content: flex-start;
+  gap: 1rem;
+}
+
+.search-book-card img {
+  width: auto;
+  max-width: 75px;
+  height: 100px;
+}
