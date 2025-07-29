@@ -56,7 +56,7 @@
   height: auto;
 }
 
-.card-isbn {
+.card-year {
   grid-area: 2 / 2 / 3 / 3;
   display: flex;
   justify-self: flex-end;

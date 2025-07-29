@@ -10,8 +10,15 @@
       <% data.forEach((note) => { %>
         <div class="book-card">
           <div class="card-body">
+            <% console.log("daaaaaa" + note.date_started) %>
             <p class="text-grey card-rating minimize-txt" style="justify-self: flex-start">Rating: <%= note.rating %>/10</p>
-            <p class="text-grey card-read minimize-txt">Read: <%= note.date_started.getMonth() %>/<%= note.date_started.getFullYear() %>-<%= note.date_finished.getMonth() %>/<%= note.date_finished.getFullYear() %></p>
+            <p class="text-grey card-read minimize-txt">Read:
+            <% if (note.date_started && note.date_finished) { %>
+              <%= `${note.date_started.getMonth() + 1}/${note.date_started.getFullYear()} - ${note.date_finished.getMonth() + 1}/${note.date_finished.getFullYear()}` %>
+            <% } else if (note.date_finished) { %>
+              <%= `${note.date_finished.getMonth() + 1}/${note.date_finished.getFullYear()}` %>
+            <% } %>
+            </p>
             <div class="card-buttons card-buttons-container">
               <form class="note-form" action="/notes/<%= note.id %>/edit" method="get">
                 <button class="button edit-button" type="submit">
@@ -28,7 +35,7 @@
             </div>
             <p class="text-black mb-0 card-note minimize-txt"><%= note.summary %></p>
             <img class="card-cover" src="<%= note.book_cover %>" alt="book cover">
-            <p class="text-grey mb-0 card-isbn minimize-txt">ISBN: <%= note.book_isbn %></p>
+            <p class="text-grey mb-0 card-year minimize-txt">Year: <%= note.book_year %></p>
             <form class="note-form" action="/notes/<%= note.id %>" method="get">
               <button class="main-button btn-lg card-button" type="submit" alt="View notes">Notes</button>
             </form>

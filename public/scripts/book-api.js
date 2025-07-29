@@ -40,7 +40,6 @@ document.getElementById("book-select").addEventListener("click", async (event) =
   const searchedBook = document.getElementById("bookSearchInput").value;
   const results = await fetchBooks(searchedBook);
   const books = results.data.docs;
-  console.log(books);
 
   books.forEach((book) => {
     createBookCard(book);

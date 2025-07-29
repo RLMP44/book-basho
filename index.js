@@ -44,7 +44,8 @@ async function getUserBooks({ filterBy = 'rating', orderBy = 'DESC', filter = tr
       book.title AS book_title,
       book.cover AS book_cover,
       book.author AS book_author,
-      book.isbn AS book_isbn,
+      book.subtitle AS book_subtitle,
+      book.year AS book_year,
       users.name AS user_name
     FROM note n
     JOIN book ON n.book_id = book.id
@@ -83,7 +84,8 @@ async function getNote(noteId) {
       book.title AS book_title,
       book.cover AS book_cover,
       book.author AS book_author,
-      book.isbn AS book_isbn
+      book.subtitle AS book_subtitle,
+      book.year AS book_year
     FROM note n
     JOIN book ON n.book_id = book.id
     WHERE n.id = $1;
@@ -149,13 +151,55 @@ app.get("/add", async (req, res) => {
 });
 
 app.post("/add", async (req, res) => {
-  console.log(req.body);
+  const note = req.body;
+  const book = req.session.bookData;
   // create transaction
+  try {
+    await db.query("BEGIN");
+    // add selected book and get id upon successful creation
+    const bookQuery = `
+      INSERT INTO book (title, cover, author, year, subtitle)
+      VALUES ($1, $2, $3, $4, $5)
+      RETURNING id;
+    `;
+    const newBook = await db.query(bookQuery, [
+      book.title,
+      book.cover,
+      book.author,
+      book.year,
+      book.subtitle
+    ]);
+    console.log("new book: " + newBook.rows[0])
+    const bookId = newBook.rows[0].id;
+
+    // create note instance using id from new book instance and current user id
+    // TODO: allow multiple users - get current user id
+    const noteQuery = `
+      INSERT INTO note (rating, date_started, date_finished, note, summary, user_id, book_id)
+      VALUES ($1, $2, $3, $4, $5, $6, $7);
+    `;
+
+    await db.query(noteQuery, [
+      note.rating,
+      note.start ? new Date(`${note.start}-01`) : null,
+      new Date(`${note.finish}-01`),
+      note.note || null,
+      note.summary || null,
+      currentUserId,
+      bookId
+    ]);
+
+    await db.query("COMMIT");
+  } catch (error) {
+    await db.query("ROLLBACK");
+    console.error("error occurred: " + error);
+    res.render("add.ejs", { bookData: req.session.bookData });
+  }
   // create book instance
   // create note
   // if saved, go to index
   // if failed, go back to /add
-  res.render("/");
+  res.redirect("/");
 });
 
 app.post("/addBook", async (req, res) => {

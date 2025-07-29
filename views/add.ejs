@@ -21,7 +21,7 @@
               <div>
                 <div class="searchbar-form mb-2" style="position: relative; z-index: 0;">
                   <div class="searchbar-input">
-                    <input id="bookSearchInput" type="text" class="form-basic searchbar-input minimize-txt" name="bookSearchInput" title="search input" placeholder="Enter book title, author, or ISBN">
+                    <input id="bookSearchInput" type="text" class="form-basic searchbar-input minimize-txt" name="bookSearchInput" title="search input" placeholder="Enter book title or author">
                   </div>
                   <div class="searchbar-button">
                     <button id="book-select" class="main-button btn-sm searchbar-button minimize-txt" type="button">
@@ -63,9 +63,9 @@
       </select>
       <br>
       <label for="start"><strong>Started on: </strong></label>
-      <input type="date" id="start" name="start" class="form-basic"><br>
+      <input type="month" id="start" name="start" class="form-basic"><br>
       <label for="finish"><strong>Finished on: </strong></label>
-      <input type="date" id="finish" name="finish" class="form-basic" required><br>
+      <input type="month" id="finish" name="finish" class="form-basic" required><br>
       <label for="note"><strong>Note: </strong></label>
       <textarea name="note" class="edit-note form-basic" rows="14" cols="10" wrap="soft" style="overflow-y: scroll; resize: none;"></textarea><br>
       <label for="summary"><strong>Summary: </strong></label>
