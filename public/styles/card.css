@@ -73,8 +73,16 @@
   gap: 1rem;
 }
 
+.search-book-card:hover {
+  box-shadow: 2px 2px 4px var(--main-dark-green);
+}
+
 .search-book-card img {
   width: auto;
-  max-width: 75px;
+  max-width: 50px;
   height: 100px;
+}
+
+.search-book-info {
+  align-self: center;
 }

@@ -2,51 +2,69 @@ const APIEndpoint = 'https://openlibrary.org/search.json';
 
 async function fetchBooks(searchInput) {
   try {
-    return await axios.get(APIEndpoint + "?q=" + searchInput);
+    return await axios.get(APIEndpoint + "?q=" + searchInput + "&language=eng");
   } catch (error) {
     console.log(error);
   }
 };
 
+function createBookCard(book) {
+  const booksContainer = document.getElementById("searchResultsContainer");
+  const title = book.title || "No title available";
+  const subtitle = book.subtitle || "";
+  const author = book.author_name ? book.author_name.join(", ") : "Author unknown";
+  const coverUrl = book.cover_i ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg` : "";
+  const year = book.first_publish_year || "Not listed";
+  const html = `
+    <div class="search-book-card"
+      data-title="${title}"
+      data-subtitle="${subtitle}"
+      data-author="${author}"
+      data-year="${year}"
+      data-cover="${coverUrl}""
+      >
+      ${coverUrl ? `<img src="${coverUrl}" alt="${title}" />` : ""}
+      <div class="search-book-info">
+        <p class="mb-0"><strong>${title}</strong></p>
+        <p class="mb-0">${subtitle}</p>
+        <p class="mb-0"><em>${author}</em></p>
+        <p class="mb-0">Published: ${year}</p>
+      </div>
+    </div>
+  `;
+
+  booksContainer.insertAdjacentHTML("beforeend", html);
+};
+
 document.getElementById("book-select").addEventListener("click", async (event) => {
-  console.log('goddamn');
   const searchedBook = document.getElementById("bookSearchInput").value;
   const results = await fetchBooks(searchedBook);
   const books = results.data.docs;
-  const booksContainer = document.getElementById("searchResultsContainer");
+  console.log(books);
+
   books.forEach((book) => {
-    const bookCard = document.createElement("div");
-    bookCard.className = "search-book-card";
+    createBookCard(book);
+  });
 
-    const bookInfo = document.createElement("div");
-    bookInfo.className = "search-book-info";
+  document.querySelectorAll(".search-book-card").forEach((book) => {
+    book.addEventListener("click", async (event) => {
+      const card = event.currentTarget;
 
-    const title = document.createElement("p");
-    title.textContent = book.title || "No title available";
+      const data = {
+        cover: card.dataset.cover,
+        title: card.dataset.title,
+        subtitle: card.dataset.subtitle,
+        author: card.dataset.author,
+        year: card.dataset.year
+      }
 
-    const author = document.createElement("p");
-    author.textContent = book.author_name ? book.author_name.join(", ") : "Author unknown";
+      await fetch("/addBook", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
 
-    const cover = document.createElement("img");
-    if (book.cover_i) {
-      cover.src = `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`;
-      cover.alt = book.title;
-    } else {
-      cover.alt = "No cover image";
-    }
-
-    // Add everything to card
-    bookInfo.appendChild(author);
-    bookInfo.appendChild(title);
-    bookCard.appendChild(cover);
-    bookCard.appendChild(bookInfo);
-
-    // Add card to container
-    booksContainer.appendChild(bookCard);
-    // book.author_name
-    // book.title
-    // book.subtitle
-    // book.cover_i
-    // book.cover_edition_key
-  })
+      window.location.href = "/add";
+    });
+  });
 });

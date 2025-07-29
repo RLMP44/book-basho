@@ -41,13 +41,13 @@
 <!-- ---------------- note form ---------------- -->
     <form class="note-form edit-form" action="/add" method="post">
       <% if (locals.bookData) { %>
-        <p id="book-title-display"><strong>Book Title: </strong><br><%= bookData.book_title %></p>
-        <p id="author-display"><strong>Author: </strong><br><%= bookData.book_author %></p>
+        <p id="book-title-display"><strong>Book Title: </strong><br><%= bookData.title %></p>
+        <p id="author-display"><strong>Author: </strong><br><%= bookData.author %></p>
       <% } else { %>
         <p><strong>Book Title: </strong><br></p>
         <p><strong>Author: </strong><br></p>
       <% }; %>
-      <input type="hidden" name="itemId" required>
+      <!-- <input type="hidden" name="itemId" required> -->
       <label for="rating"><strong>Rating: </strong></label>
       <select type="radio" id="rating" class="form-basic" name="rating" required>
         <option value="1">1</option>

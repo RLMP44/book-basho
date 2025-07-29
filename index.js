@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import pg from "pg";
 import dotenv from 'dotenv';
 import axios from "axios";
+import session from "express-session";
 
 dotenv.config();
 
@@ -23,6 +24,8 @@ db.connect();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
+app.use(express.json());
+app.use(session({ secret: "keyboard cat", resave: false, saveUninitialized: true }));
 
 const currentUserId = 1;
 
@@ -140,31 +143,45 @@ app.get("/notes/:id/edit", async (req, res) => {
 
 app.get("/add", async (req, res) => {
   console.log("add button pressed");
-  res.render("add.ejs");
+  // use selected book data (stored in session) to populate form
+  const bookData = req.session.bookData || {};
+  res.render("add.ejs", { bookData: bookData });
 });
 
 app.post("/add", async (req, res) => {
-  const data = req.body;
-  console.log(data);
+  console.log(req.body);
+  // create transaction
+  // create book instance
+  // create note
+  // if saved, go to index
+  // if failed, go back to /add
   res.render("/");
 });
 
-app.post("/search-book", async (req, res) => {
-  console.log(req.body.searchInput);
-  // get data from api
-    // send data from API to frontend to display multiple book options
-    // get user book preference from options
-    // use user preference to choose data from API and send to backend to create book instance
-    // get book instance and send to front end to display
-  // try {
-  //   const results = await fetchBooks(req.body.searchInput);
-  //   console.log(results);
-  //   // res.json(results); // send JSON to frontend
-  // } catch (error) {
-  //   console.log(error);
-  //   res.status(500).json({ error: "Search failed" });
-  // }
+app.post("/addBook", async (req, res) => {
+  // catch book data from user selected book and store it in session for later
+  req.session.bookData = req.body;
+  console.log(req.body);
+  res.status(200).end();
+  // res.render("/");
 });
+
+// app.post("/search-book", async (req, res) => {
+//   console.log(req.body.searchInput);
+//   // get data from api
+//     // send data from API to frontend to display multiple book options
+//     // get user book preference from options
+//     // use user preference to choose data from API and send to backend to create book instance
+//     // get book instance and send to front end to display
+//   // try {
+//   //   const results = await fetchBooks(req.body.searchInput);
+//   //   console.log(results);
+//   //   // res.json(results); // send JSON to frontend
+//   // } catch (error) {
+//   //   console.log(error);
+//   //   res.status(500).json({ error: "Search failed" });
+//   // }
+// });
 
 app.post("/notes/:id/edit", async (req, res) => {
   try {
