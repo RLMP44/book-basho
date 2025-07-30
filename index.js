@@ -94,6 +94,45 @@ async function getNote(noteId) {
   return results.rows[0]
 };
 
+async function fetchBookId(book) {
+  try {
+    const bookQuery = `
+      SELECT * FROM book
+      WHERE title = $1 AND cover = $2 AND author = $3 AND year = $4 AND subtitle = $5;
+    `;
+    const foundBook = await db.query(bookQuery, [
+      book.title,
+      book.cover,
+      book.author,
+      book.year,
+      book.subtitle
+    ]);
+    if (foundBook.rows[0]) {return foundBook.rows[0].id};
+  } catch (error) {
+    console.error("Error fetching book from database: " + error);
+  }
+};
+
+async function createAndFetchNewBook(book) {
+  try {
+    const newBookQuery = `
+      INSERT INTO book (title, cover, author, year, subtitle)
+      VALUES ($1, $2, $3, $4, $5)
+      RETURNING id;
+    `;
+    const newBook = await db.query(newBookQuery, [
+      book.title,
+      book.cover,
+      book.author,
+      book.year,
+      book.subtitle
+    ]);
+    return newBook.rows[0].id;
+  } catch (error) {
+    console.error("Error creating new book: " + error);
+  }
+};
+
 // ----------------- HTTP requests -----------------
 app.get("/", async (req, res) => {
   try {
@@ -166,25 +205,13 @@ app.get("/add", async (req, res) => {
 app.post("/add", async (req, res) => {
   const note = req.body;
   const book = req.session.bookData;
-  // create transaction
   try {
-    // TODO: check for book in database before creating
+    // create transaction
     await db.query("BEGIN");
-    // add selected book and get id upon successful creation
-    const bookQuery = `
-      INSERT INTO book (title, cover, author, year, subtitle)
-      VALUES ($1, $2, $3, $4, $5)
-      RETURNING id;
-    `;
-    const newBook = await db.query(bookQuery, [
-      book.title,
-      book.cover,
-      book.author,
-      book.year,
-      book.subtitle
-    ]);
-    console.log("new book: " + newBook.rows[0])
-    const bookId = newBook.rows[0].id;
+    // search for book in database and populate book id
+    var bookId = await fetchBookId(book);
+    // create book if not in database and get new id
+    if (!bookId) { bookId = await createAndFetchNewBook(book); }
 
     // create note instance using id from new book instance and current user id
     // TODO: allow multiple users - get current user id
@@ -192,7 +219,6 @@ app.post("/add", async (req, res) => {
       INSERT INTO note (rating, date_started, date_finished, note, summary, user_id, book_id)
       VALUES ($1, $2, $3, $4, $5, $6, $7);
     `;
-
     await db.query(noteQuery, [
       note.rating,
       note.start ? new Date(`${note.start}-15`) : null,
