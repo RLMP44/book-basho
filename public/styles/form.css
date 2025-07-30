@@ -47,3 +47,9 @@
   min-width: -webkit-fill-available;
   position: relative;
 }
+
+#new-note {
+  align-self: center;
+  justify-self: flex-end;
+  padding: 0rem 1rem;
+}

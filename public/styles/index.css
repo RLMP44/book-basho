@@ -22,10 +22,17 @@ body {
 
 .custom-navbar {
   background-color: var(--main-green);
-  width: 100vw;
+  width: 100dvw;
   height: 4.5rem;
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: 136px 1fr 136px;
+  padding: 0rem 1rem;
+}
+
+.icon {
+  height: 60px;
+  width: auto;
+  align-self: center;
 }
 
 .custom-footer {

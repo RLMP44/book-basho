@@ -56,8 +56,33 @@
   height: auto;
 }
 
-.card-isbn {
+.card-year {
   grid-area: 2 / 2 / 3 / 3;
   display: flex;
   justify-self: flex-end;
+}
+
+.search-book-card {
+  border: 1px solid var(--main-dark-green);
+  margin: 10px 10px 10px 0px;
+  background-color: var(--main-green);
+  padding: .5rem;
+  width: auto;
+  display: flex;
+  justify-content: flex-start;
+  gap: 1rem;
+}
+
+.search-book-card:hover {
+  box-shadow: 2px 2px 4px var(--main-dark-green);
+}
+
+.search-book-card img {
+  width: auto;
+  max-width: 50px;
+  height: 100px;
+}
+
+.search-book-info {
+  align-self: center;
 }

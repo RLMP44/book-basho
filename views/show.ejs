@@ -5,7 +5,13 @@
     <div class="book-card">
       <div class="card-body">
         <p class="text-grey card-rating" style="justify-self: flex-start">Rating: <%= data.rating %>/10</p>
-        <p class="text-grey card-read">Read: <%= data.date_started.getMonth() %>/<%= data.date_started.getFullYear() %>-<%= data.date_finished.getMonth() %>/<%= data.date_finished.getFullYear() %></p>
+        <p class="text-grey card-read">Read:
+        <% if (data.date_started) { %>
+          <%= `${data.date_started.getMonth() + 1}/${data.date_started.getFullYear()} - ${data.date_finished.getMonth() + 1}/${data.date_finished.getFullYear()}` %>
+        <% } else { %>
+          <%= `${data.date_finished.getMonth() + 1}/${data.date_finished.getFullYear()}` %>
+        <% } %>
+        </p>
         <div class="card-buttons card-buttons-container">
           <form class="note-form" action="/notes/<%= data.id %>/edit" method="get">
             <button class="button edit-button" type="submit">
@@ -22,7 +28,7 @@
         </div>
         <p class="text-black mb-0 card-note"><%= data.note %></p>
         <img class="card-cover" src="<%= data.book_cover %>" alt="book cover">
-        <p class="text-grey mb-0 card-isbn">ISBN: <%= data.book_isbn %></p>
+        <p class="text-grey mb-0 card-year">Published: <%= data.book_year %></p>
       </div>
     </div>
   <% } else { %>

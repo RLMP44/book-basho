@@ -2,6 +2,8 @@ import express from "express";
 import bodyParser from "body-parser";
 import pg from "pg";
 import dotenv from 'dotenv';
+import axios from "axios";
+import session from "express-session";
 
 dotenv.config();
 
@@ -22,8 +24,12 @@ db.connect();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
+app.use(express.json());
+app.use(session({ secret: "keyboard cat", resave: false, saveUninitialized: true }));
 
 const currentUserId = 1;
+
+// ----------------- functions -----------------
 
 async function getUserBooks({ filterBy = 'rating', orderBy = 'DESC', filter = true, search = false, searchInput = '' } = {}) {
   const queryBase = `
@@ -38,7 +44,8 @@ async function getUserBooks({ filterBy = 'rating', orderBy = 'DESC', filter = tr
       book.title AS book_title,
       book.cover AS book_cover,
       book.author AS book_author,
-      book.isbn AS book_isbn,
+      book.subtitle AS book_subtitle,
+      book.year AS book_year,
       users.name AS user_name
     FROM note n
     JOIN book ON n.book_id = book.id
@@ -62,7 +69,7 @@ async function getUserBooks({ filterBy = 'rating', orderBy = 'DESC', filter = tr
   const query = queryBase + queryParams;
   const results = await db.query(query, params);
   return results.rows;
-}
+};
 
 async function getNote(noteId) {
   const query = `
@@ -77,15 +84,56 @@ async function getNote(noteId) {
       book.title AS book_title,
       book.cover AS book_cover,
       book.author AS book_author,
-      book.isbn AS book_isbn
+      book.subtitle AS book_subtitle,
+      book.year AS book_year
     FROM note n
     JOIN book ON n.book_id = book.id
     WHERE n.id = $1;
   `;
   const results = await db.query(query, [noteId]);
   return results.rows[0]
-}
+};
 
+async function fetchBookId(book) {
+  try {
+    const bookQuery = `
+      SELECT * FROM book
+      WHERE title = $1 AND cover = $2 AND author = $3 AND year = $4 AND subtitle = $5;
+    `;
+    const foundBook = await db.query(bookQuery, [
+      book.title,
+      book.cover,
+      book.author,
+      book.year,
+      book.subtitle
+    ]);
+    if (foundBook.rows[0]) {return foundBook.rows[0].id};
+  } catch (error) {
+    console.error("Error fetching book from database: " + error);
+  }
+};
+
+async function createAndFetchNewBook(book) {
+  try {
+    const newBookQuery = `
+      INSERT INTO book (title, cover, author, year, subtitle)
+      VALUES ($1, $2, $3, $4, $5)
+      RETURNING id;
+    `;
+    const newBook = await db.query(newBookQuery, [
+      book.title,
+      book.cover,
+      book.author,
+      book.year,
+      book.subtitle
+    ]);
+    return newBook.rows[0].id;
+  } catch (error) {
+    console.error("Error creating new book: " + error);
+  }
+};
+
+// ----------------- HTTP requests -----------------
 app.get("/", async (req, res) => {
   try {
     const data = await getUserBooks();
@@ -127,10 +175,6 @@ app.get("/notes/:id", async (req, res) => {
   }
 });
 
-app.post("/add", async (req, res) => {
-  // TODO: add notes
-});
-
 app.get("/notes/:id/edit", async (req, res) => {
   const idToEdit = req.params.id;
   res.render("edit.ejs", { data: await getNote(idToEdit) });
@@ -150,6 +194,57 @@ app.post("/notes/:id/edit", async (req, res) => {
   } catch (error) {
     console.log(error);
   }
+});
+
+app.get("/add", async (req, res) => {
+  // use selected book data (stored in session) to populate form
+  const bookData = req.session.bookData || {};
+  res.render("add.ejs", { bookData: bookData });
+});
+
+app.post("/add", async (req, res) => {
+  const note = req.body;
+  const book = req.session.bookData;
+  try {
+    // create transaction
+    await db.query("BEGIN");
+    // search for book in database and populate book id
+    var bookId = await fetchBookId(book);
+    // create book if not in database and get new id
+    if (!bookId) { bookId = await createAndFetchNewBook(book); }
+
+    // create note instance using id from new book instance and current user id
+    // TODO: allow multiple users - get current user id
+    const noteQuery = `
+      INSERT INTO note (rating, date_started, date_finished, note, summary, user_id, book_id)
+      VALUES ($1, $2, $3, $4, $5, $6, $7);
+    `;
+    await db.query(noteQuery, [
+      note.rating,
+      note.start ? new Date(`${note.start}-15`) : null,
+      new Date(`${note.finish}-15`),
+      note.note || null,
+      note.summary || null,
+      currentUserId,
+      bookId
+    ]);
+
+    await db.query("COMMIT");
+    // clear book data from add form upon successful transaction
+    req.session.bookData = {};
+  } catch (error) {
+    await db.query("ROLLBACK");
+    console.error("error occurred: " + error);
+    // return to prefilled form if creation failed
+    res.render("add.ejs", { bookData: req.session.bookData });
+  }
+  res.redirect("/");
+});
+
+app.post("/addBook", async (req, res) => {
+  // catch book data from user selected book and store it in session for later
+  req.session.bookData = req.body;
+  res.status(200).end();
 });
 
 app.post("/notes/:id/delete", async (req, res) => {
