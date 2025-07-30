@@ -95,8 +95,6 @@ async function getNote(noteId) {
 };
 
 // ----------------- HTTP requests -----------------
-
-
 app.get("/", async (req, res) => {
   try {
     const data = await getUserBooks();
@@ -143,8 +141,23 @@ app.get("/notes/:id/edit", async (req, res) => {
   res.render("edit.ejs", { data: await getNote(idToEdit) });
 });
 
+app.post("/notes/:id/edit", async (req, res) => {
+  try {
+    const idToEdit = req.params.id;
+    const query = `
+      UPDATE note
+      SET rating = $1, date_started = $2, date_finished = $3,
+      summary = $4, note = $5
+      WHERE id = $6
+    `;
+    db.query(query, [req.body.updatedRating, req.body.updatedStart, req.body.updatedFinish, req.body.updatedSummary, req.body.updatedNote, idToEdit])
+    res.redirect("/");
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 app.get("/add", async (req, res) => {
-  console.log("add button pressed");
   // use selected book data (stored in session) to populate form
   const bookData = req.session.bookData || {};
   res.render("add.ejs", { bookData: bookData });
@@ -155,6 +168,7 @@ app.post("/add", async (req, res) => {
   const book = req.session.bookData;
   // create transaction
   try {
+    // TODO: check for book in database before creating
     await db.query("BEGIN");
     // add selected book and get id upon successful creation
     const bookQuery = `
@@ -181,8 +195,8 @@ app.post("/add", async (req, res) => {
 
     await db.query(noteQuery, [
       note.rating,
-      note.start ? new Date(`${note.start}-01`) : null,
-      new Date(`${note.finish}-01`),
+      note.start ? new Date(`${note.start}-15`) : null,
+      new Date(`${note.finish}-15`),
       note.note || null,
       note.summary || null,
       currentUserId,
@@ -190,57 +204,21 @@ app.post("/add", async (req, res) => {
     ]);
 
     await db.query("COMMIT");
+    // clear book data from add form upon successful transaction
+    req.session.bookData = {};
   } catch (error) {
     await db.query("ROLLBACK");
     console.error("error occurred: " + error);
+    // return to prefilled form if creation failed
     res.render("add.ejs", { bookData: req.session.bookData });
   }
-  // create book instance
-  // create note
-  // if saved, go to index
-  // if failed, go back to /add
   res.redirect("/");
 });
 
 app.post("/addBook", async (req, res) => {
   // catch book data from user selected book and store it in session for later
   req.session.bookData = req.body;
-  console.log(req.body);
   res.status(200).end();
-  // res.render("/");
-});
-
-// app.post("/search-book", async (req, res) => {
-//   console.log(req.body.searchInput);
-//   // get data from api
-//     // send data from API to frontend to display multiple book options
-//     // get user book preference from options
-//     // use user preference to choose data from API and send to backend to create book instance
-//     // get book instance and send to front end to display
-//   // try {
-//   //   const results = await fetchBooks(req.body.searchInput);
-//   //   console.log(results);
-//   //   // res.json(results); // send JSON to frontend
-//   // } catch (error) {
-//   //   console.log(error);
-//   //   res.status(500).json({ error: "Search failed" });
-//   // }
-// });
-
-app.post("/notes/:id/edit", async (req, res) => {
-  try {
-    const idToEdit = req.params.id;
-    const query = `
-      UPDATE note
-      SET rating = $1, date_started = $2, date_finished = $3,
-      summary = $4, note = $5
-      WHERE id = $6
-    `;
-    db.query(query, [req.body.updatedRating, req.body.updatedStart, req.body.updatedFinish, req.body.updatedSummary, req.body.updatedNote, idToEdit])
-    res.redirect("/");
-  } catch (error) {
-    console.log(error);
-  }
 });
 
 app.post("/notes/:id/delete", async (req, res) => {
