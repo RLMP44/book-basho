@@ -97,6 +97,10 @@
   padding: 13px 50px 13px;
 }
 
+.btn-mobile {
+  display: none;
+}
+
 .add-button {
   background-color: var(--main-dark-green);
   padding: .5rem 1rem;

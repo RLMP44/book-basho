@@ -5,12 +5,33 @@
     font-size: .75rem;
   }
 
+  .btn-mobile {
+    display: inline-block;
+  }
+
+  .btn-desktop {
+    display: none;
+  }
+
+  .icon {
+    height: 40px !important;
+  }
+
   .outline {
     grid-area: 2 / 1 / 6 / -1;
   }
 
   main .custom-navbar {
     height: 3.5rem;
+    grid-template-columns: 1fr 10fr 1fr;
+  }
+
+  .add-button {
+    padding: .25rem .5rem;
+  }
+
+  #new-note {
+    padding: 0;
   }
 
   .title-text {
@@ -28,11 +49,11 @@
   }
 
   .outline::after {
-    top: 1vh;
+    top: 8px;
   }
 
   .outline::before {
-    top: 2vh;
+    top: 18px;
   }
 
   .delete, .edit-icon {
@@ -102,6 +123,9 @@
 /* Small devices (portrait tablets and large phones) */
 @media (min-width: 577px) and (max-width: 768px) {
   /* Styles for small tablets and phones */
+  .title-text {
+    font-size: 2.5rem;
+  }
 }
 
 @media (max-width: 768px) {
@@ -112,6 +136,14 @@
     padding: 2rem 2rem;
     margin: 2rem 2rem 1rem 2rem !important;
     grid-area: 3 / 1 / 4 / 4;
+  }
+
+  .btn-mobile {
+    display: inline-block;
+  }
+
+  .btn-desktop {
+    display: none;
   }
 }
 
@@ -142,6 +174,7 @@
 @media (min-width: 1201px) {
   .main-content {
     grid-gap: 1rem;
+    grid-template-rows: auto 200px auto auto auto;
   }
 
   .search-bar {
