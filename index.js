@@ -194,15 +194,34 @@ app.get("/notes/:id/edit", async (req, res) => {
 app.post("/notes/:id/edit", async (req, res) => {
   try {
     const idToEdit = req.params.id;
-    const updatedStart = new Date(`${req.body.updatedStart}-15`);
-    const updatedFinish = new Date(`${req.body.updatedFinish}-15`);
-    const query = `
-      UPDATE note
-      SET rating = $1, date_started = $2, date_finished = $3,
-      summary = $4, note = $5
-      WHERE id = $6
-    `;
-    db.query(query, [req.body.updatedRating, updatedStart, updatedFinish, req.body.updatedSummary, req.body.updatedNote, idToEdit])
+    var updates = [];
+    const queryArray = [];
+    if (req.body.updatedRating) {
+      updates.push(`rating = $${queryArray.length + 1}`);
+      queryArray.push(req.body.updatedRating);
+    }
+    if (req.body.updatedStart) {
+      const updatedStart = new Date(`${req.body.updatedStart}-15`);
+      updates.push(`date_started = $${queryArray.length + 1}`);
+      queryArray.push(updatedStart);
+    }
+    if (req.body.updatedFinish) {
+      const updatedFinish = new Date(`${req.body.updatedFinish}-15`);
+      updates.push(`date_finished = $${queryArray.length + 1}`);
+      queryArray.push(updatedFinish);
+    }
+    if (req.body.updatedSummary) {
+      updates.push(`summary = $${queryArray.length + 1}`);
+      queryArray.push(req.body.updatedSummary);
+    }
+    if (req.body.updatedNote) {
+      updates.push(`note = $${queryArray.length + 1}`);
+      queryArray.push(req.body.updatedNote);
+    }
+    queryArray.push(idToEdit);
+
+    const query = `UPDATE note SET ${updates.join(', ')} WHERE id = $${queryArray.length};`;
+    await db.query(query, queryArray);
     res.redirect("/");
   } catch (error) {
     console.log(error);
