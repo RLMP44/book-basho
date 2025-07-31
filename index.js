@@ -30,7 +30,6 @@ app.use(session({ secret: "keyboard cat", resave: false, saveUninitialized: true
 const currentUserId = 1;
 
 // ----------------- functions -----------------
-
 async function getUserBooks({ filterBy = 'rating', orderBy = 'DESC', filter = true, search = false, searchInput = '' } = {}) {
   const queryBase = `
     SELECT
@@ -133,6 +132,13 @@ async function createAndFetchNewBook(book) {
   }
 };
 
+function formatDate(date) {
+  const month = date.getMonth() + 1;
+  const paddedMonth = month < 10 ? '0' + `${month}` : `${month}`;
+  const year = date.getFullYear();
+  return `${year}-${paddedMonth}`;
+};
+
 // ----------------- HTTP requests -----------------
 app.get("/", async (req, res) => {
   try {
@@ -177,19 +183,29 @@ app.get("/notes/:id", async (req, res) => {
 
 app.get("/notes/:id/edit", async (req, res) => {
   const idToEdit = req.params.id;
-  res.render("edit.ejs", { data: await getNote(idToEdit) });
+  const data = await getNote(idToEdit);
+  console.log(data)
+  console.log("sending to dates")
+  const dates = {
+    start: data.date_started ? formatDate(data.date_started) : '',
+    finish: formatDate(data.date_finished),
+  }
+  res.render("edit.ejs", { data: data, dates: dates });
 });
 
 app.post("/notes/:id/edit", async (req, res) => {
   try {
     const idToEdit = req.params.id;
+    const updatedStart = new Date(`${req.body.updatedStart}-15`);
+    console.log("input date: " + updatedStart)
+    const updatedFinish = new Date(`${req.body.updatedFinish}-15`);
     const query = `
       UPDATE note
       SET rating = $1, date_started = $2, date_finished = $3,
       summary = $4, note = $5
       WHERE id = $6
     `;
-    db.query(query, [req.body.updatedRating, req.body.updatedStart, req.body.updatedFinish, req.body.updatedSummary, req.body.updatedNote, idToEdit])
+    db.query(query, [req.body.updatedRating, updatedStart, updatedFinish, req.body.updatedSummary, req.body.updatedNote, idToEdit])
     res.redirect("/");
   } catch (error) {
     console.log(error);
