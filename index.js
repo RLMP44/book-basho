@@ -184,8 +184,6 @@ app.get("/notes/:id", async (req, res) => {
 app.get("/notes/:id/edit", async (req, res) => {
   const idToEdit = req.params.id;
   const data = await getNote(idToEdit);
-  console.log(data)
-  console.log("sending to dates")
   const dates = {
     start: data.date_started ? formatDate(data.date_started) : '',
     finish: formatDate(data.date_finished),
@@ -197,7 +195,6 @@ app.post("/notes/:id/edit", async (req, res) => {
   try {
     const idToEdit = req.params.id;
     const updatedStart = new Date(`${req.body.updatedStart}-15`);
-    console.log("input date: " + updatedStart)
     const updatedFinish = new Date(`${req.body.updatedFinish}-15`);
     const query = `
       UPDATE note
