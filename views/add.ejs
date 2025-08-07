@@ -39,37 +39,39 @@
     </div>
 
 <!-- ---------------- note form ---------------- -->
-    <form class="note-form edit-form" action="/add" method="post">
-      <% if (locals.bookData) { %>
-        <p id="book-title-display"><strong>Book Title: </strong><br><%= bookData.title %></p>
-        <p id="author-display"><strong>Author: </strong><br><%= bookData.author %></p>
-      <% } else { %>
-        <p><strong>Book Title: </strong><br></p>
-        <p><strong>Author: </strong><br></p>
-      <% }; %>
-      <!-- <input type="hidden" name="itemId" required> -->
+    <form class="note-form edit-form" tabindex="-1" action="/add" method="post">
+      <% if (locals.messages.error && locals.messages.error.length > 0) { %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <strong>Uh oh!</strong> <%= messages.error[0] %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      <% } %>
+      <p id="book-title-display"><strong>Book Title: </strong><br><%= locals.bookData ? bookData.title : '' %></p>
+      <p id="author-display"><strong>Author: </strong><br><%= locals.bookData ? bookData.author : '' %></p>
+      <input type="hidden" id="selectedBookFormData" name="selectedBookFormData" value="<%= locals.bookData ? JSON.stringify(bookData) : '' %>" required>
+
       <label for="rating"><strong>Rating: </strong></label>
       <select type="radio" id="rating" class="form-basic" name="rating" required>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
-        <option value="9">9</option>
-        <option value="10">10</option>
+        <option value="1" <%= locals?.submittedData?.rating == 1 ? "selected" : "" %>>1</option>
+        <option value="2" <%= locals?.submittedData?.rating == 2 ? "selected" : "" %>>2</option>
+        <option value="3" <%= locals?.submittedData?.rating == 3 ? "selected" : "" %>>3</option>
+        <option value="4" <%= locals?.submittedData?.rating == 4 ? "selected" : "" %>>4</option>
+        <option value="5" <%= locals?.submittedData?.rating == 5 ? "selected" : "" %>>5</option>
+        <option value="6" <%= locals?.submittedData?.rating == 6 ? "selected" : "" %>>6</option>
+        <option value="7" <%= locals?.submittedData?.rating == 7 ? "selected" : "" %>>7</option>
+        <option value="8" <%= locals?.submittedData?.rating == 8 ? "selected" : "" %>>8</option>
+        <option value="9" <%= locals?.submittedData?.rating == 9 ? "selected" : "" %>>9</option>
+        <option value="10" <%= locals?.submittedData?.rating == 10 ? "selected" : "" %>>10</option>
       </select>
       <br>
       <label for="start"><strong>Started on: </strong></label>
-      <input type="month" id="start" name="start" class="form-basic"><br>
+      <input type="month" id="start" name="start" class="form-basic" value="<%= locals?.submittedData?.start ? submittedData.start : '' %>"><br>
       <label for="finish"><strong>Finished on: </strong></label>
-      <input type="month" id="finish" name="finish" class="form-basic" required><br>
+      <input type="month" id="finish" name="finish" class="form-basic" value="<%= locals?.submittedData?.finish ? submittedData.finish : '' %>" required><br>
       <label for="note"><strong>Note: </strong></label>
-      <textarea name="note" class="edit-note form-basic" rows="14" cols="10" wrap="soft" style="overflow-y: scroll; resize: none;"></textarea><br>
+      <textarea name="note" class="edit-note form-basic" rows="14" cols="10" wrap="soft" style="overflow-y: scroll; resize: none;"><%= locals?.submittedData?.note ? submittedData.note : '' %></textarea><br>
       <label for="summary"><strong>Summary: </strong></label>
-      <textarea name="summary" class="edit-note form-basic" rows="14" cols="10" wrap="soft" style="overflow-y: scroll; resize: none;"></textarea><br>
+      <textarea name="summary" class="edit-note form-basic" rows="14" cols="10" wrap="soft" style="overflow-y: scroll; resize: none;" required><%= locals?.submittedData?.summary ? submittedData.summary : '' %></textarea><br>
       <button class="main-button btn-lg" type="submit">Save</button>
     </form>
   </div>

@@ -8,26 +8,27 @@
         <p><strong>Author: </strong><br><%= data.book_author %></p>
         <input type="hidden" name="updatedItemId" value="<%= data.id %>" required>
         <label for="rating"><strong>Rating: </strong></label>
-        <select type="radio" id="rating" class="form-basic" name="updatedRating" value="<%= data.rating %>" required>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="6">6</option>
-          <option value="7">7</option>
-          <option value="8">8</option>
-          <option value="9">9</option>
-          <option value="10">10</option>
-        </select><br>
+        <select id="rating" class="form-basic" name="updatedRating" value="<%= data.rating %>" required>
+          <option value="1" <%= data.rating == 1 ? "selected" : "" %>>1</option>
+          <option value="2" <%= data.rating == 2 ? "selected" : "" %>>2</option>
+          <option value="3" <%= data.rating == 3 ? "selected" : "" %>>3</option>
+          <option value="4" <%= data.rating == 4 ? "selected" : "" %>>4</option>
+          <option value="5" <%= data.rating == 5 ? "selected" : "" %>>5</option>
+          <option value="6" <%= data.rating == 6 ? "selected" : "" %>>6</option>
+          <option value="7" <%= data.rating == 7 ? "selected" : "" %>>7</option>
+          <option value="8" <%= data.rating == 8 ? "selected" : "" %>>8</option>
+          <option value="9" <%= data.rating == 9 ? "selected" : "" %>>9</option>
+          <option value="10" <%= data.rating == 10 ? "selected" : "" %>>10</option>
+        </select>
+        <br>
         <label for="start"><strong>Started on: </strong></label>
-        <input type="date" id="start" name="updatedStart" class="form-basic" value="<%= data.start_date %>"><br>
+        <input type="month" id="start" name="updatedStart" class="form-basic" value="<%= locals.dates ? dates.start : '' %>"><br>
         <label for="finish"><strong>Finished on: </strong></label>
-        <input type="date" id="finish" name="updatedFinish" class="form-basic" value="<%= data.finish_date %>" required><br>
+        <input type="month" id="finish" name="updatedFinish" class="form-basic" value="<%= locals.dates ? dates.finish : '' %>" required><br>
         <label for="note"><strong>Note: </strong></label>
-        <textarea name="updatedNote" class="edit-note form-basic" rows="14" cols="10" wrap="soft" style="overflow-y: scroll; resize: none;"><%= data.note %></textarea><br>
+        <textarea name="updatedNote" class="edit-note form-basic" rows="14" cols="10" wrap="soft" style="overflow-y: scroll; resize: none;" required><%= data.note %></textarea><br>
         <label for="summary"><strong>Summary: </strong></label>
-        <textarea name="updatedSummary" class="edit-note form-basic" rows="14" cols="10" wrap="soft" style="overflow-y: scroll; resize: none;"><%= data.summary %></textarea><br>
+        <textarea name="updatedSummary" class="edit-note form-basic" rows="14" cols="10" wrap="soft" style="overflow-y: scroll; resize: none;" required><%= data.summary %></textarea><br>
         <button class="main-button btn-lg" type="submit">Save</button>
       </form>
     </div>

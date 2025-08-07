@@ -4,6 +4,8 @@ import pg from "pg";
 import dotenv from 'dotenv';
 import axios from "axios";
 import session from "express-session";
+import flash from "connect-flash";
+import cookieParser from 'cookie-parser';
 
 dotenv.config();
 
@@ -25,12 +27,20 @@ db.connect();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(express.json());
-app.use(session({ secret: "keyboard cat", resave: false, saveUninitialized: true }));
+
+// flash middleware
+app.use(cookieParser('keyboard cat'));
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { maxAge: 60000 }
+}));
+app.use(flash());
 
 const currentUserId = 1;
 
 // ----------------- functions -----------------
-
 async function getUserBooks({ filterBy = 'rating', orderBy = 'DESC', filter = true, search = false, searchInput = '' } = {}) {
   const queryBase = `
     SELECT
@@ -133,6 +143,13 @@ async function createAndFetchNewBook(book) {
   }
 };
 
+function formatDate(date) {
+  const month = date.getMonth() + 1;
+  const paddedMonth = month < 10 ? '0' + `${month}` : `${month}`;
+  const year = date.getFullYear();
+  return `${year}-${paddedMonth}`;
+};
+
 // ----------------- HTTP requests -----------------
 app.get("/", async (req, res) => {
   try {
@@ -177,34 +194,89 @@ app.get("/notes/:id", async (req, res) => {
 
 app.get("/notes/:id/edit", async (req, res) => {
   const idToEdit = req.params.id;
-  res.render("edit.ejs", { data: await getNote(idToEdit) });
+  const data = await getNote(idToEdit);
+  const dates = {
+    start: data.date_started ? formatDate(data.date_started) : '',
+    finish: formatDate(data.date_finished),
+  }
+  res.render("edit.ejs", { data: data, dates: dates });
 });
 
 app.post("/notes/:id/edit", async (req, res) => {
   try {
     const idToEdit = req.params.id;
-    const query = `
-      UPDATE note
-      SET rating = $1, date_started = $2, date_finished = $3,
-      summary = $4, note = $5
-      WHERE id = $6
-    `;
-    db.query(query, [req.body.updatedRating, req.body.updatedStart, req.body.updatedFinish, req.body.updatedSummary, req.body.updatedNote, idToEdit])
+    var updates = [];
+    const queryArray = [];
+
+    // create transaction
+    await db.query("BEGIN");
+
+    if (req.body.updatedRating) {
+      updates.push(`rating = $${queryArray.length + 1}`);
+      queryArray.push(req.body.updatedRating);
+    }
+    if (req.body.updatedStart) {
+      const updatedStart = new Date(`${req.body.updatedStart}-15`);
+      updates.push(`date_started = $${queryArray.length + 1}`);
+      queryArray.push(updatedStart);
+    }
+    if (req.body.updatedFinish) {
+      const updatedFinish = new Date(`${req.body.updatedFinish}-15`);
+      updates.push(`date_finished = $${queryArray.length + 1}`);
+      queryArray.push(updatedFinish);
+    }
+    if (req.body.updatedSummary) {
+      updates.push(`summary = $${queryArray.length + 1}`);
+      queryArray.push(req.body.updatedSummary);
+    }
+    if (req.body.updatedNote) {
+      updates.push(`note = $${queryArray.length + 1}`);
+      queryArray.push(req.body.updatedNote);
+    }
+    queryArray.push(idToEdit);
+
+    const query = `UPDATE note SET ${updates.join(', ')} WHERE id = $${queryArray.length};`;
+    await db.query(query, queryArray);
+    await db.query("COMMIT");
     res.redirect("/");
   } catch (error) {
+    await db.query("ROLLBACK");
     console.log(error);
+    res.redirect("/notes/:id/edit");
   }
 });
 
 app.get("/add", async (req, res) => {
-  // use selected book data (stored in session) to populate form
-  const bookData = req.session.bookData || {};
-  res.render("add.ejs", { bookData: bookData });
+  res.render("add.ejs", {
+    bookData: {},
+    messages: { error: req.flash("error")}
+  });
 });
 
 app.post("/add", async (req, res) => {
   const note = req.body;
-  const book = req.session.bookData;
+  let book;
+
+  // catch cases when user doesn't select a book
+  try {
+    book = JSON.parse(req.body.selectedBookFormData);
+  } catch (error) {
+    req.flash("error", "Please select a book");
+    return res.render("add.ejs", {
+      submittedData: req.body,
+      messages: { error: req.flash("error") }
+    });
+  }
+
+  // keep if block for edge cases
+  if (!book || Object.keys(book).length === 0) {
+    req.flash("error", "Please select a book");
+    return res.render("add.ejs", {
+      submittedData: req.body,
+      messages: { error: req.flash("error")}
+    });
+  }
+
   try {
     // create transaction
     await db.query("BEGIN");
@@ -230,21 +302,18 @@ app.post("/add", async (req, res) => {
     ]);
 
     await db.query("COMMIT");
-    // clear book data from add form upon successful transaction
-    req.session.bookData = {};
   } catch (error) {
     await db.query("ROLLBACK");
+    req.flash("error", "Failed to create your note!");
     console.error("error occurred: " + error);
     // return to prefilled form if creation failed
-    res.render("add.ejs", { bookData: req.session.bookData });
+    return res.render("add.ejs", {
+       submittedData: req.body,
+       messages: { error: req.flash("error") }
+     });
   }
-  res.redirect("/");
-});
 
-app.post("/addBook", async (req, res) => {
-  // catch book data from user selected book and store it in session for later
-  req.session.bookData = req.body;
-  res.status(200).end();
+  res.redirect("/");
 });
 
 app.post("/notes/:id/delete", async (req, res) => {

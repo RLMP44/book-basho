@@ -57,13 +57,32 @@ document.getElementById("book-select").addEventListener("click", async (event) =
         year: card.dataset.year
       }
 
-      await fetch("/addBook", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-      });
+      // get book data and render without post request to backend
+      const hiddenInput = document.getElementById("selectedBookFormData");
+      if (hiddenInput) {
+        hiddenInput.value = JSON.stringify(data);
+      } else {
+        console.warn("selectedBookFormData input not found — book data won't be saved");
+      }
 
-      window.location.href = "/add";
+      // update form fields directly to keep any pre-existing user input
+      document.getElementById("selectedBookData").value = data.title;
+      document.getElementById("book-title-display").innerHTML = `<strong>Book Title:</strong><br>${data.title}`;
+      document.getElementById("author-display").innerHTML = `<strong>Author:</strong><br>${data.author}`;
+
+      const modalElement = document.querySelector(".modal");
+      const modal = bootstrap.Modal.getInstance(modalElement);
+      // can only be called on a bootstrap modal instance, not the element itslef
+      modal.hide();
     });
   });
+});
+
+const modalElement = document.getElementById("searchModal");
+
+// use 'show' instead of 'shown' to clear data before modal opens
+modalElement.addEventListener("show.bs.modal", () => {
+  document.getElementById("bookSearchInput").value = "";
+  document.getElementById("searchResultsContainer").innerHTML = "";
+  document.getElementById("selectedBookData").value = "";
 });
