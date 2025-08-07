@@ -26,9 +26,9 @@
         <label for="finish"><strong>Finished on: </strong></label>
         <input type="month" id="finish" name="updatedFinish" class="form-basic" value="<%= locals.dates ? dates.finish : '' %>" required><br>
         <label for="note"><strong>Note: </strong></label>
-        <textarea name="updatedNote" class="edit-note form-basic" rows="14" cols="10" wrap="soft" style="overflow-y: scroll; resize: none;"><%= data.note %></textarea><br>
+        <textarea name="updatedNote" class="edit-note form-basic" rows="14" cols="10" wrap="soft" style="overflow-y: scroll; resize: none;" required><%= data.note %></textarea><br>
         <label for="summary"><strong>Summary: </strong></label>
-        <textarea name="updatedSummary" class="edit-note form-basic" rows="14" cols="10" wrap="soft" style="overflow-y: scroll; resize: none;"><%= data.summary %></textarea><br>
+        <textarea name="updatedSummary" class="edit-note form-basic" rows="14" cols="10" wrap="soft" style="overflow-y: scroll; resize: none;" required><%= data.summary %></textarea><br>
         <button class="main-button btn-lg" type="submit">Save</button>
       </form>
     </div>

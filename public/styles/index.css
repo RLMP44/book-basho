@@ -55,3 +55,18 @@ body {
   text-decoration: none;
   color: inherit;
 }
+
+label:has(+ input:required):after {
+  content: ' *';
+  color: red;
+}
+
+label:has(+ textarea:required):after {
+  content: ' *';
+  color: red;
+}
+
+label:has(+ select:required):after {
+  content: ' *';
+  color: red;
+}
