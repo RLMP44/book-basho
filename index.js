@@ -82,6 +82,47 @@ async function getUserBooks({ filterBy = 'rating', orderBy = 'DESC', search = fa
   }
 };
 
+async function getAllBooks({ filterBy = 'rating', orderBy = 'DESC', search = false, searchInput = '' } = {}) {
+  let queryBase = `
+    SELECT
+      n.id,
+      n.rating,
+      n.date_started,
+      n.date_finished,
+      n.note,
+      n.summary,
+      n.private,
+      n.user_id,
+      book.title AS book_title,
+      book.cover AS book_cover,
+      book.author AS book_author,
+      book.subtitle AS book_subtitle,
+      book.year AS book_year,
+      users.name AS user_name
+    FROM note n
+    JOIN book ON n.book_id = book.id
+    JOIN users ON n.user_id = users.id
+    WHERE n.private = false
+  `;
+
+  const params = [];
+
+  if (search) {
+    queryBase += `
+      AND (book.title ILIKE '%' || $1 || '%' OR book.author ILIKE '%' || $1 || '%')
+    `;
+    params.push(searchInput);
+  };
+
+  const query = queryBase + `ORDER BY n.${filterBy} ${orderBy};`;
+  try {
+    const results = await db.query(query, params);
+    return results.rows;
+  } catch (error) {
+    console.log("Error retrieving all books: " + error);
+  }
+};
+
 async function getNote(noteId) {
   const query = `
     SELECT
@@ -155,7 +196,7 @@ function formatDate(date) {
 // ----------------- HTTP requests -----------------
 app.get("/", async (req, res) => {
   try {
-    const data = await getUserBooks();
+    const data = await getAllBooks();
     res.render("index.ejs", { data: data });
   } catch (error) {
     console.log(error);
@@ -167,7 +208,7 @@ app.get("/filter", async (req, res) => {
     const userInputs = req.query.filterParams.split(' ');
     const filter = userInputs[0];
     const order = userInputs[1];
-    const data = await getUserBooks({ filterBy: filter, orderBy: order })
+    const data = await getAllBooks({ filterBy: filter, orderBy: order })
     res.render("index.ejs", { data: data });
   } catch (error) {
     console.log(error);
@@ -177,7 +218,7 @@ app.get("/filter", async (req, res) => {
 app.get("/search", async (req, res) => {
   try {
     const userInput = req.query.searchInput;
-    const data = await getUserBooks({ filter: false, search: true, searchInput: userInput })
+    const data = await getAllBooks({ filter: false, search: true, searchInput: userInput })
     res.render("index.ejs", { data: data });
   } catch (error) {
     console.log(error);

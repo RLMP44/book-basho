@@ -6,7 +6,7 @@
   <%- include('partials/sidebar.ejs'); -%>
   <!-- --------------------- main content --------------------- -->
   <div class="container outline">
-    <% if (locals.data) {  %>
+    <% if (locals.data && locals.data.length > 0) {  %>
       <% data.forEach((note) => { %>
         <div class="book-card">
           <div class="card-body">
