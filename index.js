@@ -41,8 +41,8 @@ app.use(flash());
 const currentUserId = 1;
 
 // ----------------- functions -----------------
-async function getUserBooks({ filterBy = 'rating', orderBy = 'DESC', filter = true, search = false, searchInput = '' } = {}) {
-  const queryBase = `
+async function getUserBooks({ filterBy = 'rating', orderBy = 'DESC', search = false, searchInput = '' } = {}) {
+  let queryBase = `
     SELECT
       n.id,
       n.rating,
@@ -50,6 +50,7 @@ async function getUserBooks({ filterBy = 'rating', orderBy = 'DESC', filter = tr
       n.date_finished,
       n.note,
       n.summary,
+      n.private,
       n.user_id,
       book.title AS book_title,
       book.cover AS book_cover,
@@ -63,22 +64,63 @@ async function getUserBooks({ filterBy = 'rating', orderBy = 'DESC', filter = tr
     WHERE user_id = $1
   `;
 
-  var queryParams = ``;
-  var params = [currentUserId];
+  const params = [currentUserId];
 
-  if (filter) {
-    queryParams = `ORDER BY n.${filterBy} ${orderBy};`
-  } else if (search) {
-    queryParams = `
-    AND book.title ILIKE '%' || $2 || '%'
-    OR book.author ILIKE '%' || $2 || '%';
+  if (search) {
+    queryBase += `
+      AND (book.title ILIKE '%' || $2 || '%' OR book.author ILIKE '%' || $2 || '%')
     `;
     params.push(searchInput);
   };
 
-  const query = queryBase + queryParams;
-  const results = await db.query(query, params);
-  return results.rows;
+  const query = queryBase + `ORDER BY n.${filterBy} ${orderBy};`;
+  try {
+    const results = await db.query(query, params);
+    return results.rows;
+  } catch (error) {
+    console.log("Error retrieving user books: " + error);
+  }
+};
+
+async function getAllBooks({ filterBy = 'rating', orderBy = 'DESC', search = false, searchInput = '' } = {}) {
+  let queryBase = `
+    SELECT
+      n.id,
+      n.rating,
+      n.date_started,
+      n.date_finished,
+      n.note,
+      n.summary,
+      n.private,
+      n.user_id,
+      book.title AS book_title,
+      book.cover AS book_cover,
+      book.author AS book_author,
+      book.subtitle AS book_subtitle,
+      book.year AS book_year,
+      users.name AS user_name
+    FROM note n
+    JOIN book ON n.book_id = book.id
+    JOIN users ON n.user_id = users.id
+    WHERE n.private = false
+  `;
+
+  const params = [];
+
+  if (search) {
+    queryBase += `
+      AND (book.title ILIKE '%' || $1 || '%' OR book.author ILIKE '%' || $1 || '%')
+    `;
+    params.push(searchInput);
+  };
+
+  const query = queryBase + `ORDER BY n.${filterBy} ${orderBy};`;
+  try {
+    const results = await db.query(query, params);
+    return results.rows;
+  } catch (error) {
+    console.log("Error retrieving all books: " + error);
+  }
 };
 
 async function getNote(noteId) {
@@ -90,6 +132,7 @@ async function getNote(noteId) {
       n.date_finished,
       n.note,
       n.summary,
+      n.private,
       n.user_id,
       book.title AS book_title,
       book.cover AS book_cover,
@@ -153,7 +196,7 @@ function formatDate(date) {
 // ----------------- HTTP requests -----------------
 app.get("/", async (req, res) => {
   try {
-    const data = await getUserBooks();
+    const data = await getAllBooks();
     res.render("index.ejs", { data: data });
   } catch (error) {
     console.log(error);
@@ -165,7 +208,7 @@ app.get("/filter", async (req, res) => {
     const userInputs = req.query.filterParams.split(' ');
     const filter = userInputs[0];
     const order = userInputs[1];
-    const data = await getUserBooks({ filterBy: filter, orderBy: order })
+    const data = await getAllBooks({ filterBy: filter, orderBy: order })
     res.render("index.ejs", { data: data });
   } catch (error) {
     console.log(error);
@@ -175,7 +218,7 @@ app.get("/filter", async (req, res) => {
 app.get("/search", async (req, res) => {
   try {
     const userInput = req.query.searchInput;
-    const data = await getUserBooks({ filter: false, search: true, searchInput: userInput })
+    const data = await getAllBooks({ filter: false, search: true, searchInput: userInput })
     res.render("index.ejs", { data: data });
   } catch (error) {
     console.log(error);
@@ -211,6 +254,11 @@ app.post("/notes/:id/edit", async (req, res) => {
     // create transaction
     await db.query("BEGIN");
 
+
+    if (req.body.updatedPrivacy) {
+      updates.push(`private = $${queryArray.length + 1}`);
+      queryArray.push(req.body.updatedPrivacy);
+    }
     if (req.body.updatedRating) {
       updates.push(`rating = $${queryArray.length + 1}`);
       queryArray.push(req.body.updatedRating);
@@ -288,8 +336,8 @@ app.post("/add", async (req, res) => {
     // create note instance using id from new book instance and current user id
     // TODO: allow multiple users - get current user id
     const noteQuery = `
-      INSERT INTO note (rating, date_started, date_finished, note, summary, user_id, book_id)
-      VALUES ($1, $2, $3, $4, $5, $6, $7);
+      INSERT INTO note (rating, date_started, date_finished, note, summary, private, user_id, book_id)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8);
     `;
     await db.query(noteQuery, [
       note.rating,
@@ -297,6 +345,7 @@ app.post("/add", async (req, res) => {
       new Date(`${note.finish}-15`),
       note.note || null,
       note.summary || null,
+      note.private || false,
       currentUserId,
       bookId
     ]);

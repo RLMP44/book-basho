@@ -48,6 +48,10 @@
       <% } %>
       <p id="book-title-display"><strong>Book Title: </strong><br><%= locals.bookData ? bookData.title : '' %></p>
       <p id="author-display"><strong>Author: </strong><br><%= locals.bookData ? bookData.author : '' %></p>
+      <div class="checkbox-container d-flex justify-content-start align-items-center">
+        <label for="private" style="padding: .5rem .5rem .5rem 0;"><strong>Private: </strong></label><br>
+        <input type="checkbox" id="private" name="private" value=true>
+      </div>
       <input type="hidden" id="selectedBookFormData" name="selectedBookFormData" value="<%= locals.bookData ? JSON.stringify(bookData) : '' %>" required>
 
       <label for="rating"><strong>Rating: </strong></label>
