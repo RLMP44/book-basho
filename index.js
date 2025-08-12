@@ -41,8 +41,8 @@ app.use(flash());
 const currentUserId = 1;
 
 // ----------------- functions -----------------
-async function getUserBooks({ filterBy = 'rating', orderBy = 'DESC', filter = true, search = false, searchInput = '' } = {}) {
-  const queryBase = `
+async function getUserBooks({ filterBy = 'rating', orderBy = 'DESC', search = false, searchInput = '' } = {}) {
+  let queryBase = `
     SELECT
       n.id,
       n.rating,
@@ -50,6 +50,7 @@ async function getUserBooks({ filterBy = 'rating', orderBy = 'DESC', filter = tr
       n.date_finished,
       n.note,
       n.summary,
+      n.private,
       n.user_id,
       book.title AS book_title,
       book.cover AS book_cover,
@@ -63,22 +64,22 @@ async function getUserBooks({ filterBy = 'rating', orderBy = 'DESC', filter = tr
     WHERE user_id = $1
   `;
 
-  var queryParams = ``;
-  var params = [currentUserId];
+  const params = [currentUserId];
 
-  if (filter) {
-    queryParams = `ORDER BY n.${filterBy} ${orderBy};`
-  } else if (search) {
-    queryParams = `
-    AND book.title ILIKE '%' || $2 || '%'
-    OR book.author ILIKE '%' || $2 || '%';
+  if (search) {
+    queryBase += `
+      AND (book.title ILIKE '%' || $2 || '%' OR book.author ILIKE '%' || $2 || '%')
     `;
     params.push(searchInput);
   };
 
-  const query = queryBase + queryParams;
-  const results = await db.query(query, params);
-  return results.rows;
+  const query = queryBase + `ORDER BY n.${filterBy} ${orderBy};`;
+  try {
+    const results = await db.query(query, params);
+    return results.rows;
+  } catch (error) {
+    console.log("Error retrieving user books: " + error);
+  }
 };
 
 async function getNote(noteId) {
@@ -90,6 +91,7 @@ async function getNote(noteId) {
       n.date_finished,
       n.note,
       n.summary,
+      n.private,
       n.user_id,
       book.title AS book_title,
       book.cover AS book_cover,
@@ -211,6 +213,11 @@ app.post("/notes/:id/edit", async (req, res) => {
     // create transaction
     await db.query("BEGIN");
 
+
+    if (req.body.updatedPrivacy) {
+      updates.push(`private = $${queryArray.length + 1}`);
+      queryArray.push(req.body.updatedPrivacy);
+    }
     if (req.body.updatedRating) {
       updates.push(`rating = $${queryArray.length + 1}`);
       queryArray.push(req.body.updatedRating);
