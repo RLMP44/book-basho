@@ -288,8 +288,8 @@ app.post("/add", async (req, res) => {
     // create note instance using id from new book instance and current user id
     // TODO: allow multiple users - get current user id
     const noteQuery = `
-      INSERT INTO note (rating, date_started, date_finished, note, summary, user_id, book_id)
-      VALUES ($1, $2, $3, $4, $5, $6, $7);
+      INSERT INTO note (rating, date_started, date_finished, note, summary, private, user_id, book_id)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8);
     `;
     await db.query(noteQuery, [
       note.rating,
@@ -297,6 +297,7 @@ app.post("/add", async (req, res) => {
       new Date(`${note.finish}-15`),
       note.note || null,
       note.summary || null,
+      note.private || false,
       currentUserId,
       bookId
     ]);
