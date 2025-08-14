@@ -83,8 +83,8 @@ const currentUserId = 1;
 //   }
 // };
 
-async function getAllBooks({ filterBy = 'rating', orderBy = 'DESC', search = false, searchInput = '' } = {}) {
-  let queryBase = `
+async function getAllBooks() {
+  let query = `
     SELECT
       n.id,
       n.rating,
@@ -104,20 +104,11 @@ async function getAllBooks({ filterBy = 'rating', orderBy = 'DESC', search = fal
     JOIN book ON n.book_id = book.id
     JOIN users ON n.user_id = users.id
     WHERE n.private = false
+    ORDER BY n.rating DESC;
   `;
 
-  const params = [];
-
-  if (search) {
-    queryBase += `
-      AND (book.title ILIKE '%' || $1 || '%' OR book.author ILIKE '%' || $1 || '%')
-    `;
-    params.push(searchInput);
-  };
-
-  const query = queryBase + `ORDER BY n.${filterBy} ${orderBy};`;
   try {
-    const results = await db.query(query, params);
+    const results = await db.query(query);
     return results.rows;
   } catch (error) {
     console.log("Error retrieving all books: " + error);
@@ -198,18 +189,6 @@ function formatDate(date) {
 app.get("/", async (req, res) => {
   try {
     const data = await getAllBooks();
-    res.render("index.ejs", { data: data });
-  } catch (error) {
-    console.log(error);
-  }
-});
-
-app.get("/filter", async (req, res) => {
-  try {
-    const userInputs = req.query.filterParams.split(' ');
-    const filter = userInputs[0];
-    const order = userInputs[1];
-    const data = await getAllBooks({ filterBy: filter, orderBy: order })
     res.render("index.ejs", { data: data });
   } catch (error) {
     console.log(error);
