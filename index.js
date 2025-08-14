@@ -195,16 +195,6 @@ app.get("/", async (req, res) => {
   }
 });
 
-// app.get("/search", async (req, res) => {
-//   try {
-//     const userInput = req.query.searchInput;
-//     const data = await getAllBooks({ filter: false, search: true, searchInput: userInput })
-//     res.render("index.ejs", { data: data });
-//   } catch (error) {
-//     console.log(error);
-//   }
-// });
-
 app.get("/notes/:id", async (req, res) => {
   const noteId = req.params.id;
   try {

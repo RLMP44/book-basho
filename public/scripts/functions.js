@@ -2,13 +2,14 @@ function searchFunction(event) {
   const button = event.currentTarget;
   const data = JSON.parse(button.getAttribute('data-books'));
   var sortedData = data;
-  // console.log(data);
   const searchInput = document.getElementById("searchInput").value;
   const filterParams = document.getElementById("filterParams").value;
 
   if (searchInput) {
-    // TODO: search function
-    // (book.title ILIKE '%' || $1 || '%' OR book.author ILIKE '%' || $1 || '%')
+    sortedData = sortedData.filter(book =>
+      book.book_title.toLowerCase().includes(searchInput.toLowerCase()) ||
+      book.book_author.toLowerCase().includes(searchInput.toLowerCase())
+    );
   }
 
   if (filterParams) {
@@ -16,14 +17,14 @@ function searchFunction(event) {
     const filter = userInputs[0]; // rating or date_finished
     const order = userInputs[1]; // DESC or ASC
     if (filter === 'rating' && order === 'ASC') {
-      sortedData = data.sort((a, b) => a.rating - b.rating);
+      sortedData = sortedData.sort((a, b) => a.rating - b.rating);
     } else if (filter === 'date_finished' && order === 'DESC') {
-      sortedData = data.sort((a, b) => new Date(b.date_finished) - new Date(a.date_finished));
+      sortedData = sortedData.sort((a, b) => new Date(b.date_finished) - new Date(a.date_finished));
     } else if (filter === 'date_finished' && order === 'ASC') {
-      sortedData = data.sort((a, b) => new Date(a.date_finished) - new Date(b.date_finished));
+      sortedData = sortedData.sort((a, b) => new Date(a.date_finished) - new Date(b.date_finished));
     } else {
       // default filter (filter === 'rating' && order === 'DESC')
-      sortedData = data.sort((a, b) => b.rating - a.rating);
+      sortedData = sortedData.sort((a, b) => b.rating - a.rating);
     }
   }
   updateCards(sortedData);
@@ -33,17 +34,25 @@ function updateCards(books) {
   const container = document.querySelector(".outline");
   container.innerHTML = '';
 
-  books.forEach((book) => {
-    const card = createIndexCard(book);
-    container.appendChild(card);
-  });
+  if (books.length > 0) {
+    books.forEach((book) => {
+      const card = createIndexCard(book);
+      container.appendChild(card);
+    });
+  } else {
+    const text = document.createElement('p');
+    text.innerHTML = `<p>No titles available</p>`;
+    container.appendChild(text);
+  }
+
+
 }
 
 // INPUT: string
 // OUTPUT: string
 function formatDatesForDisplay(date_started = null, date_finished) {
   let formattedDates = '';
-  const started = new Date(date_started);
+  const started = date_started ? new Date(date_started) : null;
   const finished = new Date(date_finished);
   if (started && finished) {
     formattedDates = `${started.getMonth() + 1}/${started.getFullYear()} - ${finished.getMonth() + 1}/${finished.getFullYear()}`;
