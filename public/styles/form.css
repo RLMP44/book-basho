@@ -9,7 +9,8 @@
 .edit-note {
   height: 300px;
   width: 800px;
-  text-wrap: wrap;;
+  text-wrap: wrap;
+  white-space: pre-line;
 }
 
 .form-container {
