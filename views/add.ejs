@@ -7,37 +7,6 @@
       Find book
     </button>
 
-    <!-- ---------------- Modal ---------------- -->
-    <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="searchModalLabel">Search or Select a Book</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <div class="search-results-container">
-              <!-- ---------------- Form ---------------- -->
-              <div>
-                <div class="searchbar-form mb-2" style="position: relative; z-index: 0;">
-                  <div class="searchbar-input">
-                    <input id="bookSearchInput" type="text" class="form-basic searchbar-input minimize-txt" name="bookSearchInput" title="search input" placeholder="Enter book title or author">
-                  </div>
-                  <div class="searchbar-button">
-                    <button id="book-select" class="main-button btn-sm searchbar-button minimize-txt" type="button">
-                      Select
-                    </button>
-                  </div>
-                </div>
-                <div id="searchResultsContainer"></div>
-                <input type="hidden" id="selectedBookData" name="selectedBook">
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
 <!-- ---------------- note form ---------------- -->
     <form class="note-form edit-form" tabindex="-1" action="/add" method="post">
       <% if (locals.messages.error && locals.messages.error.length > 0) { %>
@@ -46,8 +15,8 @@
           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
       <% } %>
-      <p id="book-title-display"><strong>Book Title: </strong><br><%= locals.bookData ? bookData.title : '' %></p>
-      <p id="author-display"><strong>Author: </strong><br><%= locals.bookData ? bookData.author : '' %></p>
+      <p id="book-title-display"><strong>Book Title: </strong><br><%= locals.bookData.length > 0 ? bookData.title : '**Book not selected' %></p>
+      <p id="author-display"><strong>Author: </strong><br><%= locals.bookData.length > 0 ? bookData.author : '**Book not selected' %></p>
       <div class="checkbox-container d-flex justify-content-start align-items-center">
         <label for="private" style="padding: .5rem .5rem .5rem 0;"><strong>Private: </strong></label><br>
         <input type="checkbox" id="private" name="private" value=true>
@@ -78,6 +47,37 @@
       <textarea name="summary" class="edit-note form-basic" rows="14" cols="10" wrap="soft" style="overflow-y: scroll; resize: none;" required><%= locals?.submittedData?.summary ? submittedData.summary : '' %></textarea><br>
       <button class="main-button btn-lg" type="submit">Save</button>
     </form>
+  </div>
+
+  <!-- ---------------- Modal ---------------- -->
+  <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="searchModalLabel">Search or Select a Book</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="search-results-container">
+            <!-- ---------------- Book Search Form ---------------- -->
+            <div>
+              <div class="searchbar-form mb-2" style="position: relative; z-index: 0;">
+                <div class="searchbar-input">
+                  <input id="bookSearchInput" type="text" class="form-basic searchbar-input minimize-txt" name="bookSearchInput" title="search input" placeholder="Enter book title or author">
+                </div>
+                <div class="searchbar-button">
+                  <button id="book-select" class="main-button btn-sm searchbar-button minimize-txt" type="button">
+                    Select
+                  </button>
+                </div>
+              </div>
+              <div id="searchResultsContainer"></div>
+              <input type="hidden" id="selectedBookData" name="selectedBook">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
