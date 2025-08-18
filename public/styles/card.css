@@ -51,8 +51,7 @@
   min-height: 175px;
   width: 95%;
   height: auto;
-  margin-right: 1rem;
-  margin-bottom: 1rem;
+  margin: 0rem 1rem .25rem 0rem;
   float: left;
 }
 

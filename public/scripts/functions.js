@@ -84,8 +84,10 @@ function createIndexCard(data) {
         <p class="text-black mb-0 minimize-txt"><strong>${data.book_title}</strong></p>
         <p class="text-black minimize-txt"><em>${data.book_author}</em></p>
       </div>
-      <p class="text-black mb-0 card-note minimize-txt">${data.summary}</p>
-      <img class="card-cover" src="${data.book_cover}" alt="book cover">
+      <p class="text-black mb-0 card-note minimize-txt" style="white-space: pre-line;">
+        <img class="card-cover" src="${data.book_cover}" alt="book cover">
+        ${data.summary}
+      </p>
       <p class="text-grey mb-0 card-year minimize-txt">Published: ${data.book_year}</p>
       <form class="note-form" action="/notes/${data.id}" method="get">
         <button class="main-button btn-lg card-button" type="submit" alt="View notes">Notes</button>
