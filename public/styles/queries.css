@@ -84,48 +84,53 @@
   }
 
   .card-read {
-    grid-area: 4 / 1 / 5 / 2;
+    grid-area: 3 / 1 / 4 / 2;
     margin: .25rem 0rem;
     justify-self: flex-start;
+    text-align: start;
   }
 
   .card-buttons {
     grid-area: 1 / 2 / 2 / 3;
     display: flex;
     justify-self: flex-end;
-    align-self: center;
     gap: 8px;
   }
 
   .card-title-author {
-    grid-area: 2 / 1 / 3 / 3;
+    grid-area: 2 / 1 / 3 / 2;
+  }
+
+  .card-author {
+    margin-bottom: 0rem;
   }
 
   .card-note {
-    grid-area: 3 / 1 / 4 / 3;
+    grid-area: 4 / 1 / 5 / 3;
   }
 
   .card-cover {
     max-width: 115px;
     max-height: 175px;
-    grid-area: 4 / 2 / 7 / 3;
+    grid-area: 2 / 2 / 5 / 3;
     align-self: flex-start;
     width: auto;
     height: auto;
   }
 
   .card-year {
-    grid-area: 5 / 1 / 6 / 2;
-    justify-self: flex-start;
+    grid-area: 2 / 2 / 3 / 3;
+    justify-self: flex-end;
   }
 
   .note-form {
-    grid-area: 6 / 1 / 7 / 2;
+    grid-area: 5 / 1 / 6 / 3;
     justify-self: flex-start;
   }
 
   .card-button {
-    padding: 13px 50% 13px;
+    padding: 13px 100% 13px;
+    font-size: 12px;
   }
 }
 
@@ -134,6 +139,25 @@
   /* Styles for small tablets and phones */
   .title-text {
     font-size: 2.5rem;
+  }
+
+  .main-content {
+    grid-template-columns: 50% 50%;
+    padding: 1rem;
+    background-size: 300px auto;
+  }
+
+  .search-bar, .sidebar {
+    background-color: var(--main-green-transparent);
+  }
+
+  .sidebar {
+    grid-area: 1 / 2.5 / 2 / 4;
+    margin: 0rem 1rem 1rem 1rem;
+  }
+
+  .search-bar {
+    grid-area: 2 / 1 / 3 / 4;
   }
 }
 
@@ -220,7 +244,7 @@
   }
 
   .note-form {
-    grid-area: 5 / 2 / 6 / 3;
+    grid-area: 5 / 3 / 6 / 4;
   }
 }
 

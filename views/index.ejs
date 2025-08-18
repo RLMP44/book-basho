@@ -30,10 +30,12 @@
             </div>
             <div class="card-title-author">
               <p class="text-black mb-0 minimize-txt"><strong><%= note.book_title %></strong></p>
-              <p class="text-black minimize-txt"><em><%= note.book_author %></em></p>
+              <p class="text-black card-author minimize-txt"><em><%= note.book_author %></em></p>
             </div>
-            <p class="text-black mb-0 card-note minimize-txt"><%= note.summary %></p>
-            <img class="card-cover" src="<%= note.book_cover %>" alt="book cover">
+            <p class="text-black mb-0 card-note minimize-txt">
+              <img class="card-cover" src="<%= note.book_cover %>" alt="book cover">
+              <%= note.summary %>
+            </p>
             <p class="text-grey mb-0 card-year minimize-txt">Published: <%= note.book_year %></p>
             <form class="note-form" action="/notes/<%= note.id %>" method="get">
               <button class="main-button btn-lg card-button" type="submit" alt="View notes">Notes</button>
