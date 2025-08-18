@@ -24,10 +24,12 @@
         </div>
         <div class="card-title-author">
           <p class="text-black mb-0"><strong><%= data.book_title %></strong></p>
-          <p class="text-black"><em><%= data.book_author %></em></p>
+          <p class="text-black card-author"><em><%= data.book_author %></em></p>
         </div>
-        <p class="text-black mb-0 card-note"><%= data.note %></p>
-        <img class="card-cover" src="<%= data.book_cover %>" alt="book cover">
+        <p class="text-black mb-0 card-note">
+          <img class="card-cover" src="<%= data.book_cover %>" alt="book cover">
+          <%= data.note %>
+        </p>
         <p class="text-grey mb-0 card-year">Published: <%= data.book_year %></p>
       </div>
     </div>
