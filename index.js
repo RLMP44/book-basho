@@ -6,21 +6,24 @@ import axios from "axios";
 import session from "express-session";
 import flash from "connect-flash";
 import cookieParser from 'cookie-parser';
+import bcrypt from "bcrypt";
+import passport from "passport";
+import { Strategy } from "passport-local";
+import GoogleStrategy from "passport-google-oauth2";
+import { runInNewContext } from "vm";
 
 dotenv.config();
 
 const app = express();
 const port = 3000;
-const dbPass = process.env.PG_ADMIN_PASS;
-const dbUser = process.env.PG_ADMIN_USER;
-const dbName = process.env.PG_ADMIN_DB;
+const saltRounds = 10;
 
 const db = new pg.Client({
-  user: dbUser,
-  host: "localhost",
-  database: dbName,
-  password: dbPass,
-  port: 5432,
+  user: process.env.PG_ADMIN_USER,
+  host: process.env.PG_ADMIN_HOST,
+  database: process.env.PG_ADMIN_DB,
+  password: process.env.PG_ADMIN_PASS,
+  port: process.env.PG_ADMIN_PORT,
 });
 db.connect();
 
@@ -29,13 +32,15 @@ app.use(express.static("public"));
 app.use(express.json());
 
 // flash middleware
-app.use(cookieParser('keyboard cat'));
+app.use(cookieParser(process.env.SESSION_SECRET));
 app.use(session({
-  secret: 'keyboard cat',
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
   cookie: { maxAge: 60000 }
 }));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(flash());
 
 const currentUserId = 1;
@@ -193,6 +198,23 @@ app.get("/", async (req, res) => {
   } catch (error) {
     console.log(error);
   }
+});
+
+app.get("/login", (req, res) => {
+  res.render("login.ejs");
+});
+
+app.get("/register", (req, res) => {
+  res.render("register.ejs");
+});
+
+app.get("/logout", (req, res) => {
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    res.redirect("/");
+  });
 });
 
 app.get("/notes/:id", async (req, res) => {
