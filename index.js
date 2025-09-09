@@ -208,6 +208,36 @@ app.get("/register", (req, res) => {
   res.render("register.ejs");
 });
 
+app.post("/register", async (req, res) => {
+  const username = req.body.username;
+  const password = req.body.password;
+  const email = req.body.email;
+
+  try {
+    const result = await db.query("SELECT * FROM users WHERE email = $1", [email]);
+    if (result.rows.length > 0) {
+      req.redirect("/login");
+    } else {
+      // create transaction
+      await db.query("BEGIN");
+      const newUserResult = await db.query(
+        "INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING *",
+        [username, email, password]
+      );
+      // const newUser = newUserResult.rows[0];
+      await db.query("COMMIT");
+    }
+
+    res.redirect("/");
+  } catch (err) {
+    await db.query("ROLLBACK");
+    console.log(err);
+    res.redirect("/register");
+  }
+
+
+});
+
 app.get("/logout", (req, res) => {
   req.logout(function (err) {
     if (err) {
