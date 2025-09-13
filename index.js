@@ -200,6 +200,7 @@ app.get("/", async (req, res) => {
   }
 });
 
+// ===== AUTH START =====
 app.get("/login", (req, res) => {
   res.render("login.ejs");
 });
@@ -216,26 +217,36 @@ app.post("/register", async (req, res) => {
   try {
     const result = await db.query("SELECT * FROM users WHERE email = $1", [email]);
     if (result.rows.length > 0) {
-      req.redirect("/login");
+      // redirect to login when user exists already
+      // TODO: log user in instead
+      res.redirect("/login");
     } else {
-      // create transaction
-      await db.query("BEGIN");
-      const newUserResult = await db.query(
-        "INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING *",
-        [username, email, password]
-      );
-      // const newUser = newUserResult.rows[0];
-      await db.query("COMMIT");
+      // encrypt password
+      bcrypt.hash(password, saltRounds, async (err, hash) => {
+        if (err) {
+          console.error("Problem hashing password: ", err);
+        } else {
+          // create transaction
+          await db.query("BEGIN");
+          // insert hash as hashed password
+          const newUserResult = await db.query(
+            "INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING *",
+            [username, email, hash]
+          );
+          const newUser = newUserResult.rows[0];
+          await db.query("COMMIT");
+          req.login(newUser, (err) => {
+            console.log("success");
+            res.redirect("/");
+          });
+        }
+      });
     }
-
-    res.redirect("/");
   } catch (err) {
     await db.query("ROLLBACK");
     console.log(err);
     res.redirect("/register");
   }
-
-
 });
 
 app.get("/logout", (req, res) => {
@@ -246,6 +257,7 @@ app.get("/logout", (req, res) => {
     res.redirect("/");
   });
 });
+// ===== AUTH END =====
 
 app.get("/notes/:id", async (req, res) => {
   const noteId = req.params.id;
