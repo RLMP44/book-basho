@@ -409,6 +409,14 @@ app.post("/notes/:id/delete", async (req, res) => {
   }
 });
 
+passport.serializeUser((user, cb) => {
+  cb(null, user);
+});
+
+passport.deserializeUser((user, cb) => {
+  cb(null, user);
+});
+
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
