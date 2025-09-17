@@ -200,8 +200,6 @@ function isAuthorized(currentUser, postUserID) {
 
 // ----------------- HTTP requests -----------------
 app.get("/", async (req, res) => {
-  console.log(req.isAuthenticated());
-  console.log(req.user);
   try {
     const data = await getAllBooks();
     res.render("index.ejs", { data: data });
@@ -301,7 +299,6 @@ app.get("/notes/:id", async (req, res) => {
   const noteId = req.params.id;
   try {
     const results = await getNote(noteId);
-    console.log(results)
     res.render("show.ejs", { data: results });
   } catch (error) {
     console.log(error);
