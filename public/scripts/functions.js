@@ -44,8 +44,6 @@ function updateCards(books) {
     text.innerHTML = `<p>No titles available</p>`;
     container.appendChild(text);
   }
-
-
 }
 
 // INPUT: string
