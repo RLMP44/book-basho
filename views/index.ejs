@@ -18,16 +18,18 @@
               <%= `${note.date_finished.getMonth() + 1}/${note.date_finished.getFullYear()}` %>
             <% } %>
             </p>
-            <div class="card-buttons card-buttons-container">
-              <form class="note-form" action="/notes/<%= note.id %>/edit" method="get">
-                <button class="button edit-button" type="submit">
-                  <img class="edit-icon" src="/images/edit-button.png" title="edit" alt="edit" />
-                </button>
-              </form>
-              <form class="note-form" action="/notes/<%= note.id %>/delete" method="post">
-                <button class="button delete warp black" type="submit" title="delete" alt="delete"></button>
-              </form>
-            </div>
+            <% if (locals.user && note.user_id === locals.user.id) { %>
+              <div class="card-buttons card-buttons-container">
+                <form class="note-form" action="/notes/<%= note.id %>/edit" method="get">
+                  <button class="button edit-button" type="submit">
+                    <img class="edit-icon" src="/images/edit-button.png" title="edit" alt="edit" />
+                  </button>
+                </form>
+                <form class="note-form" action="/notes/<%= note.id %>/delete" method="post">
+                  <button class="button delete warp black" type="submit" title="delete" alt="delete"></button>
+                </form>
+              </div>
+            <% } %>
             <div class="card-title-author">
               <p class="text-black mb-0 minimize-txt"><strong><%= note.book_title %></strong></p>
               <p class="text-black card-author minimize-txt"><em><%= note.book_author %></em></p>

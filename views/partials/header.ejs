@@ -20,8 +20,10 @@
       <a href="/" style="border: none; text-decoration: none; justify-self: center; align-self: center;">
         <div class="title-text">The Book Basho</div>
       </a>
-      <form id="new-note" action="/add" method="get">
-        <button type="submit" class="add-button btn-desktop">New Note</button>
-        <button type="submit" class="add-button btn-mobile minimize-txt">New</button>
-      </form>
+      <% if (locals.user) { %>
+        <form id="new-note" action="/add" method="get">
+          <button type="submit" class="add-button btn-desktop">New Note</button>
+          <button type="submit" class="add-button btn-mobile minimize-txt">New</button>
+        </form>
+      <% } %>
     </div>
