@@ -41,7 +41,11 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
-const currentUserId = 1;
+// use global local to access req.user from ejs templates
+app.use((req, res, next) => {
+  res.locals.user = req.user;
+  next();
+});
 
 // ----------------- functions -----------------
 // TODO: comment in when adding user creation feature
@@ -188,6 +192,10 @@ function formatDate(date) {
   return `${year}-${paddedMonth}`;
 };
 
+function isAuthorized(currentUser, postUserID) {
+  return currentUser.id === postUserID;
+}
+
 // ----------------- HTTP requests -----------------
 app.get("/", async (req, res) => {
   console.log(req.isAuthenticated());
@@ -300,11 +308,17 @@ app.get("/notes/:id", async (req, res) => {
 app.get("/notes/:id/edit", async (req, res) => {
   const idToEdit = req.params.id;
   const data = await getNote(idToEdit);
-  const dates = {
-    start: data.date_started ? formatDate(data.date_started) : '',
-    finish: formatDate(data.date_finished),
+  if (req.user && req.isAuthenticated() && isAuthorized(req.user, data.user_id)) {
+    const dates = {
+      start: data.date_started ? formatDate(data.date_started) : '',
+      finish: formatDate(data.date_finished),
+    }
+    res.render("edit.ejs", { data: data, dates: dates });
+  } else if (req.user && req.isAuthenticated) {
+    res.redirect('/');
+  } else {
+    res.redirect('/login');
   }
-  res.render("edit.ejs", { data: data, dates: dates });
 });
 
 app.post("/notes/:id/edit", async (req, res) => {
@@ -357,10 +371,14 @@ app.post("/notes/:id/edit", async (req, res) => {
 });
 
 app.get("/add", async (req, res) => {
-  res.render("add.ejs", {
-    bookData: {},
-    messages: { error: req.flash("error")}
-  });
+  if (req.user && req.isAuthenticated()) {
+    res.render("add.ejs", {
+      bookData: {},
+      messages: { error: req.flash("error")}
+    });
+  } else {
+    res.redirect('/login');
+  }
 });
 
 app.post("/add", async (req, res) => {
@@ -396,7 +414,6 @@ app.post("/add", async (req, res) => {
     if (!bookId) { bookId = await createAndFetchNewBook(book); }
 
     // create note instance using id from new book instance and current user id
-    // TODO: allow multiple users - get current user id
     const noteQuery = `
       INSERT INTO note (rating, date_started, date_finished, note, summary, private, user_id, book_id)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8);
@@ -408,7 +425,7 @@ app.post("/add", async (req, res) => {
       note.note || null,
       note.summary || null,
       note.private || false,
-      currentUserId,
+      req.user.id,
       bookId
     ]);
 
@@ -428,12 +445,19 @@ app.post("/add", async (req, res) => {
 });
 
 app.post("/notes/:id/delete", async (req, res) => {
-  try {
-    const idToDelete = req.params.id;
-    await db.query('DELETE FROM note WHERE id = $1', [idToDelete]);
-    res.redirect("/");
-  } catch (error) {
-    console.log(error);
+  const idToDelete = req.params.id;
+  const data = await getNote(idToDelete);
+  if (req.user && req.isAuthenticated() && isAuthorized(req.user, data.user_id)) {
+    try {
+      await db.query('DELETE FROM note WHERE id = $1', [idToDelete]);
+      res.redirect("/");
+    } catch (error) {
+      console.log(error);
+    }
+  } else if (req.user && req.isAuthenticated()) {
+    res.redirect('/');
+  } else {
+    res.redirect('/login');
   }
 });
 
