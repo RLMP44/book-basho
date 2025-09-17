@@ -137,9 +137,11 @@ async function getNote(noteId) {
       book.cover AS book_cover,
       book.author AS book_author,
       book.subtitle AS book_subtitle,
-      book.year AS book_year
+      book.year AS book_year,
+      users.name AS user_name
     FROM note n
     JOIN book ON n.book_id = book.id
+    JOIN users ON n.user_id = users.id
     WHERE n.id = $1;
   `;
   const results = await db.query(query, [noteId]);
@@ -299,6 +301,7 @@ app.get("/notes/:id", async (req, res) => {
   const noteId = req.params.id;
   try {
     const results = await getNote(noteId);
+    console.log(results)
     res.render("show.ejs", { data: results });
   } catch (error) {
     console.log(error);
