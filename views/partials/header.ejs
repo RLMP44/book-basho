@@ -21,9 +21,34 @@
         <div class="title-text">The Book Basho</div>
       </a>
       <% if (locals.user) { %>
-        <form id="new-note" action="/add" method="get">
-          <button type="submit" class="add-button btn-desktop">New Note</button>
-          <button type="submit" class="add-button btn-mobile minimize-txt">New</button>
+        <div class="dropdown">
+          <a href="#" id="new-note" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            <p class="rounded-circle avatar-initial">
+              <%= locals.user.name[0].toUpperCase() %>
+            </p>
+          </a>
+          <ul class="dropdown-menu text-small">
+            <li>
+              <a class="dropdown-item" href="#">Profile</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="/">Home</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="/add">New Note</a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li>
+              <a class="dropdown-item" href="/logout">Sign out</a>
+            </li>
+          </ul>
+        </div>
+      <% } else { %>
+        <form id="new-note" action="/login" method="get">
+          <button type="submit" class="header-button btn-desktop">Login</button>
+          <button type="submit" class="header-button btn-mobile minimize-txt">Login</button>
         </form>
       <% } %>
     </div>
