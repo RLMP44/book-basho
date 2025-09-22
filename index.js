@@ -326,14 +326,14 @@ app.post("/notes/:id/edit", async (req, res) => {
     const idToEdit = req.params.id;
     var updates = [];
     const queryArray = [];
+    const checkIsPrivate = req.body.updatedPrivacy === 'true';
 
     // create transaction
     await db.query("BEGIN");
 
-
     if (req.body.updatedPrivacy) {
       updates.push(`private = $${queryArray.length + 1}`);
-      queryArray.push(req.body.updatedPrivacy);
+      queryArray.push(checkIsPrivate);
     }
     if (req.body.updatedRating) {
       updates.push(`rating = $${queryArray.length + 1}`);

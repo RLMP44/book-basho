@@ -8,8 +8,6 @@
         <p><strong>Author: </strong><br><%= data.book_author %></p>
         <div class="checkbox-container d-flex justify-content-start align-items-center">
           <label for="updatedPrivacy" style="padding: .5rem .5rem .5rem 0;"><strong>Private: </strong></label><br>
-            <!-- set checkbox to have false value initially so unchecking of box is submitted -->
-          <input type="hidden" name="updatedPrivacy" value="false">
           <input type="checkbox" id="updatedPrivacy" name="updatedPrivacy" <%= data.private === true ? 'checked' : '' %> value=true>
         </div>
         <input type="hidden" name="updatedItemId" value="<%= data.id %>" required>
