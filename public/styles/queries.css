@@ -26,7 +26,7 @@
     grid-template-columns: 1fr 10fr 1fr;
   }
 
-  .add-button {
+  .header-button {
     padding: .5rem .7rem;
   }
 
@@ -131,6 +131,20 @@
   .card-button {
     padding: 13px 100% 13px;
     font-size: 12px;
+  }
+
+  .card-login {
+    grid-template-columns: 1fr;
+  }
+
+  .card-login::before {
+    content: "";
+    position: absolute;
+    top: 46%;
+    left: 5%;
+    width: 90%;
+    height: 2px;
+    background-color: black;
   }
 }
 

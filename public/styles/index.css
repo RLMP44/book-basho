@@ -35,6 +35,27 @@ body {
   align-self: center;
 }
 
+.dropdown {
+  align-self: center;
+  justify-self: right;
+}
+
+.dropdown-menu {
+  background-color: var(--main-white) !important;
+  box-shadow: 2px 2px 4px var(--text-grey);
+}
+
+.avatar-initial {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  text-align: center;
+  font-weight: bold;
+  margin: 0;
+  padding: .25rem .7rem;
+  background-color: var(--main-dark-green);
+}
+
 .custom-footer {
   background-color: var(--main-green);
   width: 100vw;

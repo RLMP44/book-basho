@@ -99,10 +99,16 @@
   background-color: black;
 }
 
-.show {
+.center {
   justify-self: center !important;
 }
 
 .container {
   max-width: -webkit-fill-available !important;
+}
+
+.login-page-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }

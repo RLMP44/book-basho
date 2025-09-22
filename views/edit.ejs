@@ -1,6 +1,6 @@
 <%- include('partials/header.ejs'); -%>
 
-<div class="container outline show" style="max-width: 900px !important;">
+<div class="container outline center" style="max-width: 900px !important;">
   <% if (locals.data) {  %>
     <div class="form-container">
       <form class="note-form edit-form" action="/notes/<%= data.id %>/edit" method="post">
