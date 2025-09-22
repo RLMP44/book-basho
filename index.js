@@ -213,12 +213,8 @@ app.get("/", async (req, res) => {
 // TODO: authenticate user for necessary pages
 
 // ===== AUTH START =====
-app.get("/login", (req, res) => {
-  res.render("login.ejs");
-});
-
 app.get("/register", (req, res) => {
-  res.render("register.ejs");
+  res.render("login.ejs");
 });
 
 app.post("/register", async (req, res) => {
@@ -254,6 +250,10 @@ app.post("/register", async (req, res) => {
     console.log(err);
     res.redirect("/register");
   }
+});
+
+app.get("/login", (req, res) => {
+  res.render("login.ejs");
 });
 
 // starts the OAuth flow, and redirects to google login page with scopes
