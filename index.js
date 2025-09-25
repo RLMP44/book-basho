@@ -48,47 +48,70 @@ app.use((req, res, next) => {
 });
 
 // ----------------- functions -----------------
-// TODO: comment in when adding user creation feature
-// async function getUserBooks({ filterBy = 'rating', orderBy = 'DESC', search = false, searchInput = '' } = {}) {
-//   let queryBase = `
-//     SELECT
-//       n.id,
-//       n.rating,
-//       n.date_started,
-//       n.date_finished,
-//       n.note,
-//       n.summary,
-//       n.private,
-//       n.user_id,
-//       book.title AS book_title,
-//       book.cover AS book_cover,
-//       book.author AS book_author,
-//       book.subtitle AS book_subtitle,
-//       book.year AS book_year,
-//       users.name AS user_name
-//     FROM note n
-//     JOIN book ON n.book_id = book.id
-//     JOIN users ON n.user_id = users.id
-//     WHERE user_id = $1
-//   `;
+async function getUserPublicBooks(userID) {
+  let query = `
+    SELECT
+      n.id,
+      n.rating,
+      n.date_started,
+      n.date_finished,
+      n.note,
+      n.summary,
+      n.private,
+      n.user_id,
+      book.title AS book_title,
+      book.cover AS book_cover,
+      book.author AS book_author,
+      book.subtitle AS book_subtitle,
+      book.year AS book_year,
+      users.name AS user_name
+    FROM note n
+    JOIN book ON n.book_id = book.id
+    JOIN users ON n.user_id = users.id
+    WHERE user_id = $1
+    AND n.private = false
+    ORDER BY n.rating DESC;
+  `;
 
-//   const params = [currentUserId];
+  try {
+    const results = await db.query(query, [userID]);
+    return results.rows;
+  } catch (error) {
+    console.log("Error retrieving user's books: " + error);
+  }
+};
 
-//   if (search) {
-//     queryBase += `
-//       AND (book.title ILIKE '%' || $2 || '%' OR book.author ILIKE '%' || $2 || '%')
-//     `;
-//     params.push(searchInput);
-//   };
+async function getAllUserBooks(userID) {
+  let query = `
+    SELECT
+      n.id,
+      n.rating,
+      n.date_started,
+      n.date_finished,
+      n.note,
+      n.summary,
+      n.private,
+      n.user_id,
+      book.title AS book_title,
+      book.cover AS book_cover,
+      book.author AS book_author,
+      book.subtitle AS book_subtitle,
+      book.year AS book_year,
+      users.name AS user_name
+    FROM note n
+    JOIN book ON n.book_id = book.id
+    JOIN users ON n.user_id = users.id
+    WHERE user_id = $1
+    ORDER BY n.rating DESC;
+  `;
 
-//   const query = queryBase + `ORDER BY n.${filterBy} ${orderBy};`;
-//   try {
-//     const results = await db.query(query, params);
-//     return results.rows;
-//   } catch (error) {
-//     console.log("Error retrieving user books: " + error);
-//   }
-// };
+  try {
+    const results = await db.query(query, [userID]);
+    return results.rows;
+  } catch (error) {
+    console.log("Error retrieving user's books: " + error);
+  }
+};
 
 async function getAllBooks() {
   let query = `
@@ -195,7 +218,7 @@ function formatDate(date) {
 };
 
 function isAuthorized(currentUser, postUserID) {
-  return currentUser.id === postUserID;
+  return currentUser.id == postUserID;
 }
 
 // ----------------- HTTP requests -----------------
@@ -208,7 +231,6 @@ app.get("/", async (req, res) => {
   }
 });
 
-// TODO: create GET for user show page
 // TODO: create PATCH for user to update username
 // TODO: authenticate user for necessary pages
 
@@ -299,7 +321,7 @@ app.get("/notes/:id", async (req, res) => {
   const noteId = req.params.id;
   try {
     const results = await getNote(noteId);
-    res.render("show.ejs", { data: results });
+    res.render("notes/show.ejs", { data: results });
   } catch (error) {
     console.log(error);
   }
@@ -313,7 +335,7 @@ app.get("/notes/:id/edit", async (req, res) => {
       start: data.date_started ? formatDate(data.date_started) : '',
       finish: formatDate(data.date_finished),
     }
-    res.render("edit.ejs", { data: data, dates: dates });
+    res.render("notes/edit.ejs", { data: data, dates: dates });
   } else if (req.user && req.isAuthenticated) {
     res.redirect('/');
   } else {
@@ -372,7 +394,7 @@ app.post("/notes/:id/edit", async (req, res) => {
 
 app.get("/add", async (req, res) => {
   if (req.user && req.isAuthenticated()) {
-    res.render("add.ejs", {
+    res.render("notes/add.ejs", {
       bookData: {},
       messages: { error: req.flash("error")}
     });
@@ -390,7 +412,7 @@ app.post("/add", async (req, res) => {
     book = JSON.parse(req.body.selectedBookFormData);
   } catch (error) {
     req.flash("error", "Please select a book");
-    return res.render("add.ejs", {
+    return res.render("notes/add.ejs", {
       submittedData: req.body,
       messages: { error: req.flash("error") }
     });
@@ -399,7 +421,7 @@ app.post("/add", async (req, res) => {
   // keep if block for edge cases
   if (!book || Object.keys(book).length === 0) {
     req.flash("error", "Please select a book");
-    return res.render("add.ejs", {
+    return res.render("notes/add.ejs", {
       submittedData: req.body,
       messages: { error: req.flash("error")}
     });
@@ -435,7 +457,7 @@ app.post("/add", async (req, res) => {
     req.flash("error", "Failed to create your note!");
     console.error("error occurred: " + error);
     // return to prefilled form if creation failed
-    return res.render("add.ejs", {
+    return res.render("notes/add.ejs", {
        submittedData: req.body,
        messages: { error: req.flash("error") }
      });
@@ -458,6 +480,21 @@ app.post("/notes/:id/delete", async (req, res) => {
     res.redirect('/');
   } else {
     res.redirect('/login');
+  }
+});
+
+app.get("/users/:id", async (req, res) => {
+  const userID = req.params.id;
+  try {
+    let results
+    if (req.user && req.isAuthenticated() && isAuthorized(req.user, userID)) {
+      results = await getAllUserBooks(userID);
+    } else {
+      results = await getUserPublicBooks(userID);
+    }
+    res.render("users/show.ejs", { data: results });
+  } catch (error) {
+    console.log(error);
   }
 });
 
