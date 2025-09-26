@@ -16,6 +16,8 @@ const app = express();
 const port = 3000;
 const saltRounds = 10;
 
+const bookBashoIntro = "Hello and welcome to Book Basho! This is a safe space where people can track and rate books they've read, or take notes as they go. Publish your notes and reviews for all to see, or keep them private for personal reference only. To avoid spoilers, all notes will be accessible via the Notes button on each summary. Make yourself at home!";
+
 const db = new pg.Client({
   user: process.env.PG_ADMIN_USER,
   host: process.env.PG_ADMIN_HOST,
@@ -221,19 +223,13 @@ function isAuthorized(currentUser, postUserID) {
   return currentUser.id == postUserID;
 }
 
+async function getUserBio(userID) {
+  const results = await db.query('SELECT bio, name FROM users WHERE id = $1;',
+    [userID]);
+  return results.rows[0];
+}
+
 // ----------------- HTTP requests -----------------
-app.get("/", async (req, res) => {
-  try {
-    const data = await getAllBooks();
-    res.render("index.ejs", { data: data });
-  } catch (error) {
-    console.log(error);
-  }
-});
-
-// TODO: create PATCH for user to update username
-// TODO: authenticate user for necessary pages
-
 // ===== AUTH START =====
 app.get("/register", (req, res) => {
   res.render("login.ejs");
@@ -267,9 +263,9 @@ app.post("/register", async (req, res) => {
         res.redirect("/");
       });
     };
-  } catch (err) {
+  } catch (error) {
     await db.query("ROLLBACK");
-    console.log(err);
+    console.log(error);
     res.redirect("/register");
   }
 });
@@ -316,6 +312,15 @@ app.get("/logout", (req, res) => {
 });
 
 // ===== AUTH END =====
+
+app.get("/", async (req, res) => {
+  try {
+    const data = await getAllBooks();
+    res.render("index.ejs", { data: data, bio: bookBashoIntro, name: null });
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 app.get("/notes/:id", async (req, res) => {
   const noteId = req.params.id;
@@ -492,11 +497,14 @@ app.get("/users/:id", async (req, res) => {
     } else {
       results = await getUserPublicBooks(userID);
     }
-    res.render("users/show.ejs", { data: results });
+    const userData = await getUserBio(userID);
+    res.render("users/show.ejs", { data: results, userData: userData });
   } catch (error) {
     console.log(error);
   }
 });
+
+// TODO: create PATCH for user to update username
 
 // ===== STRATEGIES START =====
 passport.use(

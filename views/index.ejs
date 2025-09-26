@@ -10,7 +10,12 @@
       <% data.forEach((note) => { %>
         <div class="book-card">
           <div class="card-body">
-            <p class="text-grey card-rating minimize-txt" style="justify-self: flex-start">Rating: <%= note.rating %>/10 given by <%= note.user_name %></p>
+            <p class="text-grey card-rating minimize-txt" style="justify-self: flex-start">
+              Rating: <%= note.rating %>/10 given by
+              <a href="/users/<%= note.user_id %>" style="padding-left: 4px; color: var(--text-black)">
+                <%= note.user_name %>
+              </a>
+            </p>
             <p class="text-grey card-read minimize-txt">Read:
             <% if (note.date_started && note.date_finished) { %>
               <%= `${note.date_started.getMonth() + 1}/${note.date_started.getFullYear()} - ${note.date_finished.getMonth() + 1}/${note.date_finished.getFullYear()}` %>
