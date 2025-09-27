@@ -1,10 +1,14 @@
-<%- include('partials/header.ejs'); -%>
+<%- include('../partials/header.ejs'); -%>
 
 <div class="container outline center">
   <% if (locals.data) {  %>
     <div class="book-card">
       <div class="card-body">
-        <p class="text-grey card-rating" style="justify-self: flex-start">Rating: <%= data.rating %>/10 given by <%= data.user_name %></p>
+        <p class="text-grey card-rating" style="justify-self: flex-start">Rating: <%= data.rating %>/10 given by
+          <a href="/users/<%= data.user_id %>" style="padding-left: 4px; color: var(--text-black)">
+            <%= data.user_name %>
+          </a>
+        </p>
         <p class="text-grey card-read">Read:
         <% if (data.date_started) { %>
           <%= `${data.date_started.getMonth() + 1}/${data.date_started.getFullYear()} - ${data.date_finished.getMonth() + 1}/${data.date_finished.getFullYear()}` %>
@@ -40,4 +44,4 @@
   <% } %>
 </div>
 
-<%- include('partials/footer.ejs'); -%>
+<%- include('../partials/footer.ejs'); -%>

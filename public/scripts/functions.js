@@ -64,11 +64,11 @@ function createIndexCard(data) {
   const card = document.createElement('div');
   const formattedDates = formatDatesForDisplay(data.date_started, data.date_finished)
   card.className = "book-card";
-  card.innerHTML = `
-    <div class="card-body">
-      <p class="text-grey card-rating minimize-txt" style="justify-self: flex-start">Rating: ${data.rating}/10</p>
-      <p class="text-grey card-read minimize-txt">Read: ${formattedDates}</p>
-      <div class="card-buttons card-buttons-container">
+  let buttonsHTML = "";
+
+  if (currentUserID && data.user_id == currentUserID) {
+    buttonsHTML =
+      `<div class="card-buttons card-buttons-container">
         <form class="note-form" action="/notes/${data.id}/edit" method="get">
           <button class="button edit-button" type="submit">
             <img class="edit-icon" src="/images/edit-button.png" title="edit" alt="edit" />
@@ -77,7 +77,18 @@ function createIndexCard(data) {
         <form class="note-form" action="/notes/${data.id}/delete" method="post">
           <button class="button delete warp black" type="submit" title="delete" alt="delete"></button>
         </form>
-      </div>
+      </div>`;
+    };
+
+  card.innerHTML = `
+    <div class="card-body">
+      <p class="text-grey card-rating minimize-txt" style="justify-self: flex-start"> Rating: ${data.rating}/10 given by
+        <a href="/users/${data.user_id}" style="padding-left: 4px; color: var(--text-black)">
+          ${data.user_name}
+        </a>
+      </p>
+      <p class="text-grey card-read minimize-txt">Read: ${formattedDates}</p>
+      ${buttonsHTML}
       <div class="card-title-author">
         <p class="text-black mb-0 minimize-txt"><strong>${data.book_title}</strong></p>
         <p class="text-black minimize-txt"><em>${data.book_author}</em></p>
