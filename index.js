@@ -504,7 +504,8 @@ app.get("/users/:id", async (req, res) => {
   }
 });
 
-// TODO: create PATCH for user to update username
+// TODO: create PATCH for user to update username and bio
+// TODO: move edit form to user show page (allow in-place edits)
 
 // ===== STRATEGIES START =====
 passport.use(
