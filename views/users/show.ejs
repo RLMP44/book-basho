@@ -4,7 +4,7 @@
   <!-- --------------------- searchbar & sidebar --------------------- -->
   <%- include('../partials/searchbar.ejs'); -%>
   <% if (locals?.userData?.bio && locals?.userData?.name) { %>
-    <%- include('../partials/sidebar.ejs', { bio: locals.userData.bio, name: locals.userData.name }); -%>
+    <%- include('../partials/sidebar.ejs', { userData: locals.userData }); -%>
   <% } %>
   <!-- --------------------- main content --------------------- -->
   <div class="container outline">

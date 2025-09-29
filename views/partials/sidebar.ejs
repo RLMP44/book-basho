@@ -1,6 +1,27 @@
 <div class="sidebar minimize-txt">
-  <% if (name) { %>
-    <p><strong><%= name.charAt(0).toUpperCase() + name.slice(1) %></strong></p>
-  <% } %>
-  <p><%= bio %></p>
+  <div class="username-container">
+    <div class="username-display username-toggle">
+      <% if (userData?.name) { %>
+        <p id="username-text"><strong><%= userData.name.charAt(0).toUpperCase() + userData.name.slice(1) %></strong></p>
+        <button class="button edit-button username-edit-trigger">
+          <img class="edit-icon" src="/images/edit-button.png" title="edit" alt="edit" />
+        </button>
+      <% } %>
+    </div>
+    <div class="username-edit username-edit-toggle hidden">
+      <%= console.log(userData)  %>
+      <form class="note-form" id="toggleable-edit-form" data-endpoint="/users/<%= userData.id %>/edit" method="post">
+        <input type="text" class="form-control" name="username" data-field="username" value="<%= userData.name %>">
+      </form>
+    </div>
+  </div>
+
+  <div class="bio-container">
+    <p><%= userData?.bio %></p>
+    <form class="note-form" action="/users/<%= userData.id %>/edit" method="post">
+      <button class="button edit-button" type="submit">
+        <img class="edit-icon" src="/images/edit-button.png" title="edit" alt="edit" />
+      </button>
+    </form>
+  </div>
 </div>
