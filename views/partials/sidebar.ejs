@@ -3,13 +3,14 @@
     <div class="username-display username-toggle">
       <% if (userData?.name) { %>
         <p id="username-text"><strong><%= userData.name.charAt(0).toUpperCase() + userData.name.slice(1) %></strong></p>
+      <% } %>
+      <% if (userData?.name && userData?.id == user?.id) { %>
         <button class="button edit-button username-edit-trigger">
           <img class="edit-icon" src="/images/edit-button.png" title="edit" alt="edit" />
         </button>
       <% } %>
     </div>
     <div class="username-edit username-edit-toggle hidden">
-      <%= console.log(userData)  %>
       <form class="note-form" id="toggleable-edit-form" data-endpoint="/users/<%= userData.id %>/edit" method="post">
         <input type="text" class="form-control" name="username" data-field="username" value="<%= userData.name %>">
       </form>
