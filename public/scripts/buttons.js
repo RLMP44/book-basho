@@ -33,7 +33,7 @@ function sendPostRequest(form) {
   .then(res => res.json()) // converts POST request response to JSON, set in HTTP request setup
   .then(data => {
     if (data.field === 'username') {
-      usernameText.innerHTML = `<strong>${data.value.charAt(0).toUpperCase() + data.value.slice(1)}</strong>`;
+      usernameText.innerHTML = `<strong>${data?.value ? formatNameForDisplay(data.value) : 'Add a username!'}</strong>`;
     }
   })
   .catch(error => {

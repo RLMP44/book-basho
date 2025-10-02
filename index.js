@@ -9,6 +9,7 @@ import bcrypt from "bcrypt";
 import passport from "passport";
 import { Strategy } from "passport-local";
 import GoogleStrategy from "passport-google-oauth2";
+import * as helpers from "./utils/helpers.js";
 
 dotenv.config();
 
@@ -42,6 +43,9 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
+
+// set up global helpers
+app.locals.formatNameForDisplay = helpers.formatNameForDisplay;
 
 // use global local to access req.user from ejs templates
 app.use((req, res, next) => {
