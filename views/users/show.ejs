@@ -3,7 +3,7 @@
 <div class="main-content">
   <!-- --------------------- searchbar & sidebar --------------------- -->
   <%- include('../partials/searchbar.ejs'); -%>
-  <% if (locals?.userData?.bio && locals?.userData?.name) { %>
+  <% if (locals?.userData?.bio && locals?.userData?.name || locals?.userData?.id == locals?.user?.id) { %>
     <%- include('../partials/sidebar.ejs', { userData: locals.userData }); -%>
   <% } %>
   <!-- --------------------- main content --------------------- -->
