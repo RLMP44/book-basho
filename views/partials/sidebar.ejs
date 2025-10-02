@@ -10,7 +10,7 @@
         </button>
       </div>
       <div class="username-edit username-edit-toggle hidden">
-        <form class="note-form" id="toggleable-edit-form" data-endpoint="/users/<%= userData.id %>/edit" method="post">
+        <form class="note-form" id="name-edit-form" data-endpoint="/users/<%= userData.id %>/edit" method="post">
           <input type="text" class="form-control" name="username" data-field="username" value="<%= userData.name %>">
         </form>
       </div>
@@ -18,13 +18,13 @@
 
     <div class="bio-container">
       <div class="bio-display bio-toggle">
-        <p><%= userData?.bio ? userData?.bio : 'Add a bio!' %></p>
+        <p id="bio-text"><%= userData?.bio ? userData?.bio : 'Add a bio!' %></p>
         <button class="button edit-button bio-edit-trigger">
           <img class="edit-icon" src="/images/edit-button.png" title="edit" alt="edit" />
         </button>
       </div>
       <div class="bio-edit bio-edit-toggle hidden">
-        <form class="note-form" id="toggleable-edit-form" data-endpoint="/users/<%= userData.id %>/edit" method="post">
+        <form class="note-form" id="bio-edit-form" data-endpoint="/users/<%= userData.id %>/edit" method="post">
           <input type="text" class="form-control" name="bio" data-field="bio" value="<%= userData.bio %>">
         </form>
       </div>

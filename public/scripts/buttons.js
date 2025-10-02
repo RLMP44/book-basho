@@ -1,6 +1,13 @@
+import { formatNameForDisplay } from './client-helpers.js';
+
 const usernameEditTrigger = document.querySelector(".username-edit-trigger");
 const usernameEditField = document.querySelector(".username-edit-toggle");
-const editForm = document.getElementById("toggleable-edit-form")
+const usernameText = document.getElementById("username-text");
+const bioEditTrigger = document.querySelector(".bio-edit-trigger");
+const bioEditField = document.querySelector(".bio-edit-toggle");
+const bioText = document.getElementById("bio-text");
+const nameEditForm = document.getElementById("name-edit-form");
+const bioEditForm = document.getElementById("bio-edit-form");
 
 // display username edit form and hide edit button
 usernameEditTrigger.addEventListener("click", () => {
@@ -9,7 +16,7 @@ usernameEditTrigger.addEventListener("click", () => {
 });
 
 // hide form and submit contents on enter, also update UI
-editForm.addEventListener('keydown', function (event) {
+nameEditForm.addEventListener('keydown', function (event) {
   if (event.key === "Enter") {
     event.preventDefault();
     sendPostRequest(this);
@@ -18,8 +25,23 @@ editForm.addEventListener('keydown', function (event) {
   }
 });
 
+// display bio edit form and hide edit button
+bioEditTrigger.addEventListener("click", () => {
+  bioEditTrigger.classList.add("hidden");
+  bioEditField.classList.remove("hidden");
+});
+
+// hide form and submit contents on enter, also update UI
+bioEditForm.addEventListener('keydown', function (event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    sendPostRequest(this);
+    bioEditTrigger.classList.remove("hidden");
+    bioEditField.classList.add("hidden");
+  }
+});
+
 function sendPostRequest(form) {
-  const usernameText = document.getElementById("username-text");
   const endpoint = form.dataset.endpoint;
   const input = form.querySelector('[data-field]');
   const updatedField = input.name;
@@ -30,10 +52,14 @@ function sendPostRequest(form) {
     headers: { "Content-type": "application/json" },
     body: JSON.stringify({ fieldToUpdate: updatedField, value: updatedValue })
   })
-  .then(res => res.json()) // converts POST request response to JSON, set in HTTP request setup
+  .then(res => { // converts POST request response to JSON, set in HTTP request setup
+    return res.json();
+  })
   .then(data => {
     if (data.field === 'username') {
       usernameText.innerHTML = `<strong>${data?.value ? formatNameForDisplay(data.value) : 'Add a username!'}</strong>`;
+    } else if (data.field === 'bio') {
+      bioText.innerHTML = `${data?.value ? data?.value : 'Add a bio!'}`;
     }
   })
   .catch(error => {
