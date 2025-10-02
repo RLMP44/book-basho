@@ -45,6 +45,10 @@ body {
   box-shadow: 2px 2px 4px var(--text-grey);
 }
 
+.hidden {
+  display: none;
+}
+
 .avatar-initial {
   display: inline-block;
   width: 32px;

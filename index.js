@@ -9,6 +9,7 @@ import bcrypt from "bcrypt";
 import passport from "passport";
 import { Strategy } from "passport-local";
 import GoogleStrategy from "passport-google-oauth2";
+import * as helpers from "./utils/helpers.js";
 
 dotenv.config();
 
@@ -42,6 +43,9 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
+
+// set up global helpers
+app.locals.formatNameForDisplay = helpers.formatNameForDisplay;
 
 // use global local to access req.user from ejs templates
 app.use((req, res, next) => {
@@ -316,7 +320,7 @@ app.get("/logout", (req, res) => {
 app.get("/", async (req, res) => {
   try {
     const data = await getAllBooks();
-    res.render("index.ejs", { data: data, bio: bookBashoIntro, name: null });
+    res.render("index.ejs", { data: data, userData: { bio: bookBashoIntro, name: null }});
   } catch (error) {
     console.log(error);
   }
@@ -498,9 +502,27 @@ app.get("/users/:id", async (req, res) => {
       results = await getUserPublicBooks(userID);
     }
     const userData = await getUserBio(userID);
-    res.render("users/show.ejs", { data: results, userData: userData });
+    res.render("users/show.ejs", { data: results, userData: { bio: userData.bio, name: userData.name, id: userID }});
   } catch (error) {
     console.log(error);
+  }
+});
+
+app.post("/users/:id/edit", async (req, res) => {
+  const userIDToEdit = req.params.id;
+  const fieldToUpdate = req.body.fieldToUpdate === "username" ? "name" : req.body.fieldToUpdate;
+  if (req.user && req.isAuthenticated() && isAuthorized(req.user, userIDToEdit)) {
+    try {
+      await db.query(`
+        UPDATE users SET ${fieldToUpdate} = $1 WHERE id = $2`,
+        [req.body.value, userIDToEdit]
+      );
+      res.json({ field: req.body.fieldToUpdate, value: req.body.value });
+    } catch (error) {
+      console.log(error)
+    }
+  } else {
+    res.redirect("/login");
   }
 });
 

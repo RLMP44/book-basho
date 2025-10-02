@@ -3,8 +3,8 @@
 <div class="main-content">
   <!-- --------------------- searchbar & sidebar --------------------- -->
   <%- include('../partials/searchbar.ejs'); -%>
-  <% if (locals?.userData?.bio && locals?.userData?.name) { %>
-    <%- include('../partials/sidebar.ejs', { bio: locals.userData.bio, name: locals.userData.name }); -%>
+  <% if (locals?.userData?.bio && locals?.userData?.name || locals?.userData?.id == locals?.user?.id) { %>
+    <%- include('../partials/sidebar.ejs', { userData: locals.userData }); -%>
   <% } %>
   <!-- --------------------- main content --------------------- -->
   <div class="container outline">
