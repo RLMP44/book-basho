@@ -57,3 +57,8 @@
   justify-self: flex-end;
   padding: 0rem 1rem;
 }
+
+.form-control {
+  background-color: var(--main-white) !important;
+  margin-bottom: 1rem !important;
+}

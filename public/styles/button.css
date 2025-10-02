@@ -43,9 +43,20 @@
   background-color: transparent;
 }
 
+.edit-button-sm {
+  background-color: transparent;
+  align-self: flex-start;
+}
+
 .edit-icon {
   width: 26px;
   height: 26px;
+  object-fit: cover;
+}
+
+.edit-icon-sm {
+  width: 20px;
+  height: 20px;
   object-fit: cover;
 }
 
