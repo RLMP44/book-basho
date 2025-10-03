@@ -31,7 +31,14 @@
                   <button class="button delete warp black" type="submit" title="delete" alt="delete"></button>
                 </form>
               </div>
-              <p style="justify-self: flex-end"><em><%= note.private === true ? 'Private' : 'Public' %></em></p>
+              <div class="private-container d-flex" style="justify-self: flex-end; gap: 8px;">
+                <p><em><%#= note.private === true ? 'Private' : 'Public' %></em></p>
+                <p><em>Private? </em></p>
+                <label class="switch">
+                  <input type="checkbox">
+                  <span class="slider round"></span>
+                </label>
+              </div>
             <% } %>
             <div class="card-title-author">
               <p class="text-black mb-0 minimize-txt"><strong><%= note.book_title %></strong></p>
