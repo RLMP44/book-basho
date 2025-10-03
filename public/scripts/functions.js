@@ -1,6 +1,7 @@
-import { formatDatesForDisplay } from './client-helpers.js';
+import { formatDatesForDisplay, formatNameForDisplay } from './client-helpers.js';
 
-function searchFunction(event) {
+// ------- filtering -------
+export function searchFunction(event) {
   const button = event.currentTarget;
   const data = JSON.parse(button.getAttribute('data-books'));
   var sortedData = data;
@@ -93,4 +94,36 @@ function createIndexCard(data) {
   `;
 
   return card;
+}
+
+// ------- in-place editing -------
+export function sendPostRequest(form) {
+  const endpoint = form.dataset.endpoint;
+  const usernameText = document.getElementById("username-text");
+  const bioText = document.getElementById("bio-text");
+  const input = form.querySelector('[data-field]');
+  const updatedField = input.name;
+  let updatedValue = input.value;
+  if (updatedField === 'private') {
+    updatedValue = form.querySelector('[data-field]').checked;
+  }
+
+  fetch(endpoint, {
+    method: form?._method?.value ? form._method.value : "POST",
+    headers: { "Content-type": "application/json" },
+    body: JSON.stringify({ fieldToUpdate: updatedField, value: updatedValue })
+  })
+  .then(res => { // converts POST request response to JSON, set in HTTP request setup
+    return res.json();
+  })
+  .then(data => {
+    if (data.field === 'username') {
+      usernameText.innerHTML = `<strong>${data?.value ? formatNameForDisplay(data.value) : 'Add a username!'}</strong>`;
+    } else if (data.field === 'bio') {
+      bioText.innerHTML = `${data?.value ? data?.value : 'Add a bio!'}`;
+    }
+  })
+  .catch(error => {
+    console.error("Update failed: " + error);
+  });
 }
