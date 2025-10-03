@@ -1,3 +1,5 @@
+import { formatDatesForDisplay } from './client-helpers.js';
+
 function searchFunction(event) {
   const button = event.currentTarget;
   const data = JSON.parse(button.getAttribute('data-books'));
@@ -44,20 +46,6 @@ function updateCards(books) {
     text.innerHTML = `<p>No titles available</p>`;
     container.appendChild(text);
   }
-}
-
-// INPUT: string
-// OUTPUT: string
-function formatDatesForDisplay(date_started = null, date_finished) {
-  let formattedDates = '';
-  const started = date_started ? new Date(date_started) : null;
-  const finished = new Date(date_finished);
-  if (started && finished) {
-    formattedDates = `${started.getMonth() + 1}/${started.getFullYear()} - ${finished.getMonth() + 1}/${finished.getFullYear()}`;
-  } else if (finished) {
-    formattedDates = `${finished.getMonth() + 1}/${finished.getFullYear()}`;
-  }
-  return formattedDates;
 }
 
 function createIndexCard(data) {

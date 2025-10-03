@@ -10,11 +10,11 @@
           </a>
         </p>
         <p class="text-grey card-read">Read:
-        <% if (data.date_started) { %>
-          <%= `${data.date_started.getMonth() + 1}/${data.date_started.getFullYear()} - ${data.date_finished.getMonth() + 1}/${data.date_finished.getFullYear()}` %>
-        <% } else { %>
-          <%= `${data.date_finished.getMonth() + 1}/${data.date_finished.getFullYear()}` %>
-        <% } %>
+          <% if (data.date_started && data.date_finished) { %>
+            <%= formatDatesForDisplay(data.date_started, data.date_finished) %>
+          <% } else if (data.date_finished) { %>
+            <%= formatDatesForDisplay(null, data.date_finished) %>
+          <% } %>
         </p>
         <% if (locals.user && data.user_id === locals.user.id) { %>
           <div class="card-buttons card-buttons-container">

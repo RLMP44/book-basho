@@ -8,6 +8,7 @@ const bioEditField = document.querySelector(".bio-edit-toggle");
 const bioText = document.getElementById("bio-text");
 const nameEditForm = document.getElementById("name-edit-form");
 const bioEditForm = document.getElementById("bio-edit-form");
+const privateEditForms = document.querySelectorAll(".private-edit-form");
 
 // display username edit form and hide edit button
 usernameEditTrigger.addEventListener("click", () => {
@@ -41,14 +42,26 @@ bioEditForm.addEventListener('keydown', function (event) {
   }
 });
 
+const privateCheckboxes = document.querySelectorAll('input[name="private"]');
+
+privateCheckboxes.forEach((checkbox) => {
+  checkbox.addEventListener("change", function (event) {
+    const editForm = this.parentNode.parentNode;
+    sendPostRequest(editForm);
+  })
+});
+
 function sendPostRequest(form) {
   const endpoint = form.dataset.endpoint;
   const input = form.querySelector('[data-field]');
   const updatedField = input.name;
-  const updatedValue = input.value;
+  let updatedValue = input.value;
+  if (updatedField === 'private') {
+    updatedValue = form.querySelector('[data-field]').checked;
+  }
 
   fetch(endpoint, {
-    method: "POST",
+    method: form?._method?.value ? form._method.value : "POST",
     headers: { "Content-type": "application/json" },
     body: JSON.stringify({ fieldToUpdate: updatedField, value: updatedValue })
   })
