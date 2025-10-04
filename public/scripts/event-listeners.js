@@ -1,44 +1,42 @@
 import { searchFunction, sendPostRequest } from './functions.js';
 
-const privateCheckboxes = document.querySelectorAll('input[name="private"]');
-const searchButton = document.getElementById("search-button");
-const triggers = document.querySelectorAll(".edit-trigger");
-const forms = document.querySelectorAll(".edit-toggle");
+const $privateCheckboxes = $('input[name="private"]');
+const $searchButton = $("#search-button");
+const $triggers = $(".edit-trigger");
+const $forms = $(".edit-toggle");
 
 // ---------- Buttons ----------
-searchButton.addEventListener('click', searchFunction);
+$searchButton.on('click', searchFunction);
 
 
 // ---------- Triggers ----------
 // display edit form and hide edit button
-triggers.forEach((trigger) => {
-  trigger.addEventListener("click", (event) => {
-    trigger.classList.add("hidden");
-    const form = event.currentTarget.parentNode.nextElementSibling
-    form.classList.remove("hidden");
-  });
-})
+$triggers.on("click", function() {
+  const $trigger = $(this)
+  $trigger.addClass("hidden");
+  const $form = $trigger.parent().next(".edit-toggle");
+  $form.removeClass("hidden");
+});
 
 
 // ---------- Forms ----------
 // hide form and submit contents on enter, also update UI
-forms.forEach((form) => {
-  form.addEventListener('keydown', function (event) {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      const trigger = event.currentTarget.previousElementSibling.querySelector(".edit-trigger");
-      sendPostRequest(this);
-      trigger.classList.remove("hidden");
-      form.classList.add("hidden");
-    }
-  });
-})
+$forms.on('keydown', function(event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    const $form = $(this);
+    const $trigger = $form.prev().find(".edit-trigger");
+    // convert form back into a DOM element
+    // allows manipulation and dataset access in function
+    sendPostRequest($form[0]);
+    $trigger.removeClass("hidden");
+    $form.addClass("hidden");
+  }
+});
 
 
 // ---------- Checkboxes ----------
-privateCheckboxes.forEach((checkbox) => {
-  checkbox.addEventListener("change", function (event) {
-    const editForm = this.parentNode.parentNode;
-    sendPostRequest(editForm);
-  })
+$privateCheckboxes.on("change", function (event) {
+  const $editForm = $(this).parent().parent();
+  sendPostRequest($editForm[0]);
 });
