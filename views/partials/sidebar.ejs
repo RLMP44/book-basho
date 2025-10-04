@@ -8,11 +8,21 @@
         <img class="edit-icon-sm" src="/images/edit-button.png" title="edit" alt="edit" />
       </button>
     </div>
-    <div class="username-edit username-edit-toggle hidden">
-      <form class="note-form" id="name-edit-form" data-endpoint="/users/<%= userData.id %>/edit" method="post">
-        <input type="text" class="form-control" name="username" data-field="username" value="<%= userData.name %>">
-      </form>
-    </div>
+    <form
+      class="note-form username-edit username-edit-toggle hidden"
+      id="name-edit-form"
+      style="width: -webkit-fill-available;"
+      data-endpoint="/users/<%= userData.id %>/edit"
+      method="post"
+      >
+      <input
+        type="text"
+        class="form-control"
+        name="username"
+        data-field="username"
+        value="<%= userData.name %>"
+        >
+    </form>
 
     <div class="bio-display bio-toggle d-flex justify-content-between">
       <p id="bio-text"><%= userData?.bio ? userData?.bio : 'Add a bio!' %></p>
@@ -20,11 +30,23 @@
         <img class="edit-icon-sm" src="/images/edit-button.png" title="edit" alt="edit" />
       </button>
     </div>
-    <div class="bio-edit bio-edit-toggle hidden">
-      <form class="note-form" id="bio-edit-form" data-endpoint="/users/<%= userData.id %>/edit" method="post">
-        <input type="text" class="form-control" name="bio" data-field="bio" value="<%= userData.bio %>">
-      </form>
-    </div>
+    <form
+      class="note-form bio-edit bio-edit-toggle hidden"
+      id="bio-edit-form"
+      style="width: -webkit-fill-available; min-height: 200px;"
+      data-endpoint="/users/<%= userData.id %>/edit"
+      method="post"
+      >
+      <textarea
+        type="text"
+        class="form-control"
+        name="bio"
+        data-field="bio"
+        value="<%= userData.bio %>"
+        >
+        <%= userData.bio %>
+      </textarea>
+    </form>
 
   <% } else { %>
     <!-- not authorized or authenticated users -->
