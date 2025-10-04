@@ -2,14 +2,14 @@
   <% if (userData && user && user?.id == userData?.id) { %>
     <!-- authenticated and authorized user -->
 
-    <div class="username-display username-toggle d-flex justify-content-between">
+    <div class="d-flex justify-content-between">
       <p id="username-text"><strong><%= userData?.name ? formatNameForDisplay(userData.name) : 'Add a username!' %></strong></p>
-      <button class="button edit-button-sm username-edit-trigger">
+      <button class="button edit-button-sm edit-trigger">
         <img class="edit-icon-sm" src="/images/edit-button.png" title="edit" alt="edit" />
       </button>
     </div>
     <form
-      class="note-form username-edit username-edit-toggle hidden"
+      class="note-form edit-toggle hidden"
       id="name-edit-form"
       style="width: -webkit-fill-available;"
       data-endpoint="/users/<%= userData.id %>/edit"
@@ -24,14 +24,14 @@
         >
     </form>
 
-    <div class="bio-display bio-toggle d-flex justify-content-between">
+    <div class="d-flex justify-content-between">
       <p id="bio-text"><%= userData?.bio ? userData?.bio : 'Add a bio!' %></p>
-      <button class="button edit-button-sm bio-edit-trigger">
+      <button class="button edit-button-sm edit-trigger">
         <img class="edit-icon-sm" src="/images/edit-button.png" title="edit" alt="edit" />
       </button>
     </div>
     <form
-      class="note-form bio-edit bio-edit-toggle hidden"
+      class="note-form edit-toggle hidden"
       id="bio-edit-form"
       style="width: -webkit-fill-available; min-height: 200px;"
       data-endpoint="/users/<%= userData.id %>/edit"
