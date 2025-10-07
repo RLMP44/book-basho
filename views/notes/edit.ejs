@@ -4,15 +4,15 @@
   <% if (locals.data) {  %>
     <div class="form-container">
       <form class="note-form edit-form" action="/notes/<%= data.id %>/edit" method="post">
-        <p><strong>Book Title: </strong><br><%= data.book_title %></p>
-        <p><strong>Author: </strong><br><%= data.book_author %></p>
-        <div class="checkbox-container d-flex justify-content-start align-items-center">
+        <p class="minimize-txt"><strong>Book Title: </strong><br><%= data.book_title %></p>
+        <p class="minimize-txt"><strong>Author: </strong><br><%= data.book_author %></p>
+        <div class="checkbox-container d-flex justify-content-start align-items-center minimize-txt">
           <label for="updatedPrivacy" style="padding: .5rem .5rem .5rem 0;"><strong>Private: </strong></label><br>
           <input type="checkbox" id="updatedPrivacy" name="updatedPrivacy" <%= data.private === true ? 'checked' : '' %> value=true>
         </div>
         <input type="hidden" name="updatedItemId" value="<%= data.id %>" required>
-        <label for="rating"><strong>Rating: </strong></label>
-        <select id="rating" class="form-basic" name="updatedRating" value="<%= data.rating %>" required>
+        <label for="rating" class="minimize-txt"><strong>Rating: </strong></label>
+        <select id="rating" class="form-basic minimize-txt" name="updatedRating" value="<%= data.rating %>" required>
           <option value="1" <%= data.rating == 1 ? "selected" : "" %>>1</option>
           <option value="2" <%= data.rating == 2 ? "selected" : "" %>>2</option>
           <option value="3" <%= data.rating == 3 ? "selected" : "" %>>3</option>
@@ -25,15 +25,15 @@
           <option value="10" <%= data.rating == 10 ? "selected" : "" %>>10</option>
         </select>
         <br>
-        <label for="start"><strong>Started on: </strong></label>
-        <input type="month" id="start" name="updatedStart" class="form-basic" value="<%= locals.dates ? dates.start : '' %>"><br>
-        <label for="finish"><strong>Finished on: </strong></label>
-        <input type="month" id="finish" name="updatedFinish" class="form-basic" value="<%= locals.dates ? dates.finish : '' %>" required><br>
-        <label for="note"><strong>Note: </strong></label>
-        <textarea name="updatedNote" class="edit-note form-basic" rows="14" cols="10" wrap="soft" style="overflow-y: scroll; resize: none;" required><%= data.note %></textarea><br>
-        <label for="summary"><strong>Summary: </strong></label>
-        <textarea name="updatedSummary" class="edit-note form-basic" rows="14" cols="10" wrap="soft" style="overflow-y: scroll; resize: none;" required><%= data.summary %></textarea><br>
-        <button class="main-button btn-lg" type="submit">Save</button>
+        <label for="start" class="minimize-txt"><strong>Started on: </strong></label>
+        <input type="month" id="start" name="updatedStart" class="form-basic minimize-txt" value="<%= locals.dates ? dates.start : '' %>"><br>
+        <label for="finish" class="minimize-txt"><strong>Finished on: </strong></label>
+        <input type="month" id="finish" name="updatedFinish" class="form-basic minimize-txt" value="<%= locals.dates ? dates.finish : '' %>" required><br>
+        <label for="note" class="minimize-txt"><strong>Note: </strong></label>
+        <textarea name="updatedNote" class="edit-note form-basic minimize-txt" rows="14" cols="10" wrap="soft" style="overflow-y: scroll; resize: none;" required><%= data.note %></textarea><br>
+        <label for="summary" class="minimize-txt"><strong>Summary: </strong></label>
+        <textarea name="updatedSummary" class="edit-note form-basic minimize-txt" rows="14" cols="10" wrap="soft" style="overflow-y: scroll; resize: none;" required><%= data.summary %></textarea><br>
+        <button class="main-button btn-lg minimize-txt" type="submit">Save</button>
       </form>
     </div>
   <% } else { %>
