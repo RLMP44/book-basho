@@ -15,9 +15,9 @@
             <p class="text-grey card-rating minimize-txt" style="justify-self: flex-start">Rating: <%= note.rating %>/10 given by <%= note.user_name %></p>
             <p class="text-grey card-read minimize-txt">Read:
             <% if (note.date_started && note.date_finished) { %>
-              <%= `${note.date_started.getMonth() + 1}/${note.date_started.getFullYear()} - ${note.date_finished.getMonth() + 1}/${note.date_finished.getFullYear()}` %>
+              <%= formatDatesForDisplay(note.date_started, note.date_finished) %>
             <% } else if (note.date_finished) { %>
-              <%= `${note.date_finished.getMonth() + 1}/${note.date_finished.getFullYear()}` %>
+              <%= formatDatesForDisplay(null, note.date_finished) %>
             <% } %>
             </p>
             <% if (locals.user && note.user_id === locals.user.id) { %>
@@ -31,7 +31,16 @@
                   <button class="button delete warp black" type="submit" title="delete" alt="delete"></button>
                 </form>
               </div>
-              <p style="justify-self: flex-end"><em><%= note.private === true ? 'Private' : 'Public' %></em></p>
+              <div class="private-container d-flex" style="justify-self: flex-end; gap: 8px;">
+                <p class="minimize-txt"><em>Private? </em></p>
+                <form class="note-form private-edit-form" data-endpoint="/notes/<%= note.id %>/edit" method="POST">
+                  <input type="hidden" name="_method" value="PATCH">
+                  <label class="switch">
+                    <input type="checkbox" class="form-control" name="private" data-field="private" <%= note.private ? 'checked' : '' %>>
+                    <span class="slider round"></span>
+                  </label>
+                </form>
+              </div>
             <% } %>
             <div class="card-title-author">
               <p class="text-black mb-0 minimize-txt"><strong><%= note.book_title %></strong></p>

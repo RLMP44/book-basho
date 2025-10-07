@@ -46,6 +46,7 @@ app.use(flash());
 
 // set up global helpers
 app.locals.formatNameForDisplay = helpers.formatNameForDisplay;
+app.locals.formatDatesForDisplay = helpers.formatDatesForDisplay;
 
 // use global local to access req.user from ejs templates
 app.use((req, res, next) => {
@@ -398,6 +399,26 @@ app.post("/notes/:id/edit", async (req, res) => {
     await db.query("ROLLBACK");
     console.log(error);
     res.redirect("/notes/:id/edit");
+  }
+});
+
+app.patch("/notes/:id/edit", async (req, res) => {
+  const idToEdit = req.params.id;
+  const data = await getNote(idToEdit);
+  const field = req.body.fieldToUpdate;
+  let value = req.body.value;
+  if (req.user && req.isAuthenticated() && isAuthorized(req.user, data.user_id)) {
+    try {
+      // create transaction
+      await db.query("BEGIN");
+      await db.query(`UPDATE note SET ${field} = $1 WHERE id = $2;`, [value, idToEdit]);
+      await db.query("COMMIT");
+      res.json({ field: field, value: value });
+    } catch (error) {
+      console.log(error)
+    }
+  } else {
+    res.redirect('/login');
   }
 });
 

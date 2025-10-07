@@ -18,9 +18,9 @@
             </p>
             <p class="text-grey card-read minimize-txt">Read:
             <% if (note.date_started && note.date_finished) { %>
-              <%= `${note.date_started.getMonth() + 1}/${note.date_started.getFullYear()} - ${note.date_finished.getMonth() + 1}/${note.date_finished.getFullYear()}` %>
+              <%= formatDatesForDisplay(note.date_started, note.date_finished) %>
             <% } else if (note.date_finished) { %>
-              <%= `${note.date_finished.getMonth() + 1}/${note.date_finished.getFullYear()}` %>
+              <%= formatDatesForDisplay(null, note.date_finished) %>
             <% } %>
             </p>
             <% if (locals.user && note.user_id === locals.user.id) { %>

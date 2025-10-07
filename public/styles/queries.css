@@ -146,6 +146,24 @@
     height: 2px;
     background-color: black;
   }
+
+  .switch {
+    width: 30px;
+    height: 18px;
+  }
+
+  .slider:before {
+    height: 12px;
+    width: 12px;
+    left: 3px;
+    bottom: 3px;
+  }
+
+  input:checked + .slider:before {
+    -webkit-transform: translateX(12px);
+    -ms-transform: translateX(12px);
+    transform: translateX(12px);
+  }
 }
 
 /* Small devices (portrait tablets and large phones) */
